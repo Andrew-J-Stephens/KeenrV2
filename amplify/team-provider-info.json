@@ -1,0 +1,20 @@
+{
+  "staging": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-keenrtodo-staging-01957-authRole",
+      "UnauthRoleArn": "arn:aws:iam::708565822424:role/amplify-keenrtodo-staging-01957-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::708565822424:role/amplify-keenrtodo-staging-01957-authRole",
+      "Region": "us-east-2",
+      "DeploymentBucketName": "amplify-keenrtodo-staging-01957-deployment",
+      "UnauthRoleName": "amplify-keenrtodo-staging-01957-unauthRole",
+      "StackName": "amplify-keenrtodo-staging-01957",
+      "StackId": "arn:aws:cloudformation:us-east-2:708565822424:stack/amplify-keenrtodo-staging-01957/5fc7e520-f80a-11ec-b0f5-063daa64af2c",
+      "AmplifyAppId": "d8f4hkbqyhki6"
+    },
+    "categories": {
+      "auth": {
+        "keenrtodo": {}
+      }
+    }
+  }
+}
