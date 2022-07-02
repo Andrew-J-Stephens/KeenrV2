@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { Text, View, TouchableOpacity, StatusBar, StyleSheet } from 'react-native';
+import { Text, View, TouchableOpacity, StatusBar, StyleSheet, ActivityIndicator } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from './HomePage';
@@ -107,24 +107,39 @@ export default function App() {
 
   const [user, setUser] = useState(undefined); 
  
-  const checkUser = async () => {
-    const authUser = await Auth.currentAuthenticatedUser();
+  const loadApp = async () => {
+    console.log('load app');
+    const authUser = await Auth.currentAuthenticatedUser()
+      .then( user => {
+        console.log(user);
+        useState({userToken: user.signInUserSession.accessToken.jwtToken})
+        console.log(user);
+      })
+      .catch( err => {
+        useState(null);
+        console.log('auth err:', err);
+      })
+        
+      this.props.navigation.navigate(user.userToken ? 'Main' : 'Login') 
     console.log('auth user');
     console.log(authUser);
     setUser(authUser);
   }
 
-  useEffect( () => {
-    checkUser();
-  },[]
+  // useEffect( () => {
+  //   checkUser();
+  // },[]
+  // );
 
-  );
-
+  loadApp();
   return (
+
     
     <NavigationContainer>
       
       <Stack.Navigator>
+
+
 
         <Stack.Screen name = "Login" component = {Login} options = {{headerShown: false}} />
         <Stack.Screen

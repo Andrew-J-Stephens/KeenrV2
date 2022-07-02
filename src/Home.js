@@ -29,6 +29,17 @@ const AddTodoModal = ({ modalVisible, setModalVisible }) => {
     setDescription('');
   }
 
+
+  async function getActive() {
+    console.log('get active');
+    const authUser = await Auth.currentAuthenticatedUser().then( (user) => {
+        console.log('auth user');
+        console.log(user);
+    });
+    console.log('auth user');
+    console.log(authUser);
+    setUser(authUser);
+  }
   function closeModal() {
     setModalVisible(false);
   }
@@ -55,8 +66,11 @@ const AddTodoModal = ({ modalVisible, setModalVisible }) => {
             placeholder="Description"
             style={styles.modalInput}
           />
-          <Pressable onPress={addTodo} style={styles.buttonContainer}>
+          {/* <Pressable onPress={addTodo} style={styles.buttonContainer}>
             <Text style={styles.buttonText}>Save Todo</Text>
+          </Pressable> */}
+          <Pressable onPress={getActive} style={styles.buttonContainer}>
+            <Text style={styles.buttonText}>getActive user</Text>
           </Pressable>
         </View>
       </View>
