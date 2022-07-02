@@ -36,7 +36,7 @@ export default function PhoneNum({navigation, route}) {
 
   function next(){
     // signInWithPhoneNumber("");
-    navigation.navigate('CodeEnter');
+    navigation.navigate('CodeEnter', {userName: route.params.userName, password: route.params.password});
   }
 
   async function createAccount (params)  {

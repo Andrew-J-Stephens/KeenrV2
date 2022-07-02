@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useEffect, useState} from 'react';
 import { Text, View, TouchableOpacity, StatusBar, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -16,7 +16,7 @@ import Password from './signupFlow/Password';
 import PhoneNum from './signupFlow/PhoneNum';
 import CodeEnter from './signupFlow/CodeEnter';
 
-import { Amplify } from 'aws-amplify';
+import { Amplify, Auth } from 'aws-amplify';
 import awsconfig from './src/aws-exports';
 import Home from './src/Home';
 
@@ -104,11 +104,28 @@ export default function App() {
 
   const Stack = createStackNavigator();
 
+
+  const [user, setUser] = useState(undefined); 
+ 
+  const checkUser = async () => {
+    const authUser = await Auth.currentAuthenticatedUser();
+    console.log('auth user');
+    console.log(authUser);
+    setUser(authUser);
+  }
+
+  useEffect( () => {
+    checkUser();
+  },[]
+
+  );
+
   return (
     
     <NavigationContainer>
       
       <Stack.Navigator>
+
         <Stack.Screen name = "Login" component = {Login} options = {{headerShown: false}} />
         <Stack.Screen
           name="Main"
@@ -124,6 +141,8 @@ export default function App() {
         options={{ headerShown: false }}/>
         <Stack.Screen name="CameraPage3" component={CameraPage3} 
         options={{ headerShown: false }}/>
+
+       
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -5,12 +5,18 @@ import { NavigationContainer } from '@react-navigation/native';
 import { Dimensions } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import PhoneNum from './PhoneNum';
+
+import { Auth } from 'aws-amplify';
+
+
+
 import {
     CodeField,
     Cursor,
     useBlurOnFulfill,
     useClearByFocusCell,
   } from 'react-native-confirmation-code-field';
+import { ConsoleLogger } from '@aws-amplify/core';
 
 const primaryColor = '#ffffff';
 const secondaryColor = '#0000000';
@@ -27,7 +33,7 @@ export const NOT_EMPTY_CELL_BG_COLOR = '#3557b7';
 export const ACTIVE_CELL_BG_COLOR = '#f7fafe';
 
 
-export default function CodeEnter({navigation}) {
+export default function CodeEnter({navigation, route}) {
 
     const [value, setValue] = useState('');
     const ref = useBlurOnFulfill({value, cellCount: CELL_COUNT});
@@ -36,6 +42,25 @@ export default function CodeEnter({navigation}) {
         setValue,
     });
     const CELL_COUNT = 6;
+
+    async function confirmSignUp ()  {
+    
+        try {
+
+            const username = route.params.userName;
+            const code = value;
+            const res = await Auth.confirmSignUp(username, code);
+            
+            if (res) {
+                await Auth.signIn(username, route.params.password);
+            }
+            navigation.navigate('Main');
+
+    
+        } catch (err) {
+            console.warn('error confirmation, ', err);
+        }
+      }
 
 
     return(
@@ -68,7 +93,9 @@ export default function CodeEnter({navigation}) {
             )}
         /></View>
         <TouchableOpacity style = {{alignSelf: 'center', backgroundColor: '#ffbc59', paddingHorizontal: 20, margin: 20, height: 50, borderRadius: 10, flexDirection: 'row', justifyContent: 'center'}}
-        onPress={() => navigation.navigate('Main')}>
+        onPress={() => 
+            confirmSignUp()
+        }>
             <Text style = {{alignSelf: 'center', color: primaryColor, fontWeight: 'bold', fontSize: '20%'}}>Confirm</Text>
         </TouchableOpacity>
 
