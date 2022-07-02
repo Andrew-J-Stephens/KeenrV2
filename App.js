@@ -12,6 +12,7 @@ import CameraPage from './CameraPage';
 import CameraPage2 from './CameraPage2';
 import CameraPage3 from './CameraPage3';
 import Username from './signupFlow/Username';
+import Password from './signupFlow/Password';
 import PhoneNum from './signupFlow/PhoneNum';
 import CodeEnter from './signupFlow/CodeEnter';
 
@@ -30,14 +31,16 @@ const parTextSize = "15%";
 const streak = 23;
 
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <StatusBar />
-      <Home />
-    </View>
-  );
-}
+//sample todo
+
+// export default function App() {
+//   return (
+//     <View style={styles.container}>
+//       <StatusBar />
+//       <Home />
+//     </View>
+//   );
+// }
 
 const styles = StyleSheet.create({
   container: {
@@ -85,42 +88,43 @@ const styles = StyleSheet.create({
 //   );
 // }
 
-// function Login() {
-//   const Stack = createStackNavigator();
-//   return(
-//       <Stack.Navigator gestureEnabled = {false} >
-//         <Stack.Screen name = "Username" component = {Username} options = {{headerShown: false}} />
-//         <Stack.Screen name = "PhoneNum" component = {PhoneNum} options = {{headerShown: false}} />
-//         <Stack.Screen name = "CodeEnter" component = {CodeEnter} options = {{headerShown: false, gestureEnabled: false}} />
-//       </Stack.Navigator>
-//   );
-// }
+function Login() {
+  const Stack = createStackNavigator();
+  return(
+      <Stack.Navigator gestureEnabled = {false} >
+        <Stack.Screen name = "Username" component = {Username} options = {{headerShown: false}} />
+        <Stack.Screen name = "Password" component = {Password} options = {{headerShown: false}} />
+        <Stack.Screen name = "PhoneNum" component = {PhoneNum} options = {{headerShown: false}} />
+        <Stack.Screen name = "CodeEnter" component = {CodeEnter} options = {{headerShown: false, gestureEnabled: false}} />
+      </Stack.Navigator>
+  );
+}
 
-// export default function App() {
+export default function App() {
 
-//   const Stack = createStackNavigator();
+  const Stack = createStackNavigator();
 
-//   return (
+  return (
     
-//     <NavigationContainer>
+    <NavigationContainer>
       
-//       <Stack.Navigator>
-//         <Stack.Screen name = "Login" component = {Login} options = {{headerShown: false}} />
-//         <Stack.Screen
-//           name="Main"
-//           component={Home}
-//           options={{ headerShown: false, gestureEnabled: false }}
-//         />
-//         <Stack.Screen name="Account" component={Account}
-//         options={{ headerShown: false }}
-//         />
-//         <Stack.Screen name="CameraPage" component={CameraPage} 
-//         options={{ headerShown: false }}/>
-//         <Stack.Screen name="CameraPage2" component={CameraPage2} 
-//         options={{ headerShown: false }}/>
-//         <Stack.Screen name="CameraPage3" component={CameraPage3} 
-//         options={{ headerShown: false }}/>
-//       </Stack.Navigator>
-//     </NavigationContainer>
-//   );
-// }
+      <Stack.Navigator>
+        <Stack.Screen name = "Login" component = {Login} options = {{headerShown: false}} />
+        <Stack.Screen
+          name="Main"
+          component={Home}
+          options={{ headerShown: false, gestureEnabled: false }}
+        />
+        <Stack.Screen name="Account" component={Account}
+        options={{ headerShown: false }}
+        />
+        <Stack.Screen name="CameraPage" component={CameraPage} 
+        options={{ headerShown: false }}/>
+        <Stack.Screen name="CameraPage2" component={CameraPage2} 
+        options={{ headerShown: false }}/>
+        <Stack.Screen name="CameraPage3" component={CameraPage3} 
+        options={{ headerShown: false }}/>
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}

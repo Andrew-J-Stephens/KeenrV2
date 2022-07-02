@@ -6,7 +6,7 @@ import { Dimensions } from 'react-native';
 import React, { useState, useRef } from 'react';
 import PhoneInput from "react-native-phone-number-input";
 import 'firebase/compat/auth';
-
+import { Auth } from 'aws-amplify';
 
 const primaryColor = '#ffffff';
 const secondaryColor = '#0000000';
@@ -17,7 +17,11 @@ const parTextSize = "15%";
 const streak = 23;
 
 
-export default function PhoneNum({navigation}) {
+export default function PhoneNum({navigation, route}) {
+
+  console.log('phoneNum'); 
+  console.log(navigation);
+  console.log(route);
     
   const [value, setValue] = useState("");
   const [formattedValue, setFormattedValue] = useState("");
@@ -31,10 +35,30 @@ export default function PhoneNum({navigation}) {
   }
 
   function next(){
-    signInWithPhoneNumber("");
+    // signInWithPhoneNumber("");
     navigation.navigate('CodeEnter');
   }
+
+  async function createAccount (params)  {
     
+    try {
+
+        const {user} = await Auth.signUp(
+          {
+            username: params.userName, 
+            password: params.password, 
+            attributes: {
+              phone_number: formattedValue,
+            }
+          }
+        );
+        
+        next() 
+
+    } catch (err) {
+        console.warn('error signing up, ', err);
+    }
+  }
     
     return(
 
@@ -74,7 +98,7 @@ export default function PhoneNum({navigation}) {
                 <Text style = {{alignSelf: 'center', color: primaryColor, fontWeight: 'bold', fontSize: '20%'}}>Back</Text>
             </TouchableOpacity>
             <TouchableOpacity style = {{alignSelf: 'center', backgroundColor: '#38b6ff', paddingHorizontal: 20, margin: 20, height: 50, borderRadius: 10, flexDirection: 'row', justifyContent: 'center'}}
-            onPress={() => next()}>
+            onPress={() => { createAccount(route.params)} }>
                 <Text style = {{alignSelf: 'center', color: primaryColor, fontWeight: 'bold', fontSize: '20%'}}>Next</Text>
                 <Ionicons name="arrow-forward-outline" size={'20%'} color="white" style = {{alignSelf: 'center', paddingLeft: 10}}/>
             </TouchableOpacity>

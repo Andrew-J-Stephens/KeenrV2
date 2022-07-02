@@ -15,10 +15,13 @@ const subTextSize = "18%";
 const parTextSize = "15%";
 const streak = 23;
 
-
 export default function Username({navigation, route}) {
-    
-    const [userName, setUserName] = useState('');
+    console.log('nav');
+    console.log(navigation);
+    console.log(route);
+    // console.log(navigation.getState('userName'));
+
+    const [password, setPassword] = useState('');
     return(
 
         <View style = {{flex: 1, backgroundColor: 'white', flexDirection: 'column', justifyContent: 'start', paddingTop: 100}}>
@@ -27,14 +30,15 @@ export default function Username({navigation, route}) {
             style = {{borderRadius: 10, width: 200, height: 200, alignSelf: 'center'}}
             source={require('../assets/icon.png')}
         />
-        <TextInput autoFocus={true} onChangeText={(username) => setUserName(username) } value={userName}  placeholder = "Username" style = {{backgroundColor: '#f6f6f6', width: '80%', height: 50, alignSelf: 'center', borderRadius: 10, paddingHorizontal: 20, fontSize: '15%'}}>
+        
+        <TextInput autoFocus={true} onChangeText={ (password) => setPassword(password)} value={password} placeholder = "Password" style = {{backgroundColor: '#f6f6f6', width: '80%', height: 50, alignSelf: 'center', borderRadius: 10, paddingHorizontal: 20, fontSize: '15%'}}>
 
         </TextInput>
         <TouchableOpacity style = {{alignSelf: 'center', backgroundColor: '#ff5857', paddingHorizontal: 20, margin: 20, height: 50, borderRadius: 10, flexDirection: 'row', justifyContent: 'center'}}
-            onPress={ function() { 
-                navigation.navigate('Password', {userName: userName});
+            onPress={() => 
+                
+                navigation.navigate('PhoneNum', {userName: route.params.userName, password: password})
             }
-        }
         >
             <Text style = {{alignSelf: 'center', color: primaryColor, fontWeight: 'bold', fontSize: '20%'}}>Next</Text>
             <Ionicons name="arrow-forward-outline" size={'20%'} color="white" style = {{alignSelf: 'center', paddingLeft: 10}}/>
