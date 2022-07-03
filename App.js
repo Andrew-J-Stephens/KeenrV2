@@ -35,7 +35,6 @@ const Tab = createBottomTabNavigator();
 
 function Home() {
 
-
   return (
     <Tab.Navigator
 
@@ -86,7 +85,7 @@ export default class AuthLoadingScreen extends React.Component {
     super(props);
 
     this.state = {
-      userToken: null
+      userToken: undefined
     };
   }
     
@@ -112,6 +111,14 @@ export default class AuthLoadingScreen extends React.Component {
 
   render() {
     
+    if (this.state.userToken === undefined) {
+      return (
+        <View style={styles.container}>
+          <ActivityIndicator size="large" color="#fff" />
+        </View>     
+      )
+    }
+
     const Stack = createStackNavigator();
 
       return (
@@ -147,3 +154,12 @@ export default class AuthLoadingScreen extends React.Component {
     );
     }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#aa73b7',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+})
