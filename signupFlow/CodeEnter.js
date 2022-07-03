@@ -32,6 +32,10 @@ export const DEFAULT_CELL_BG_COLOR = '#fff';
 export const NOT_EMPTY_CELL_BG_COLOR = '#3557b7';
 export const ACTIVE_CELL_BG_COLOR = '#f7fafe';
 
+function useForceUpdate() {
+    const [update, setUpdate] = useState(0);
+    return () => setUpdate(value => value+1);
+}
 
 export default function CodeEnter({navigation, route}) {
 
@@ -42,6 +46,10 @@ export default function CodeEnter({navigation, route}) {
         setValue,
     });
     const CELL_COUNT = 6;
+
+    const forceUpdate = useForceUpdate();
+   
+      
 
     async function confirmSignUp ()  {
     
@@ -54,7 +62,9 @@ export default function CodeEnter({navigation, route}) {
             if (res) {
                 await Auth.signIn(username, route.params.password);
             }
-            navigation.navigate('Main');
+            forceUpdate();
+            navigation.navigate('Landing');
+
 
     
         } catch (err) {
@@ -92,12 +102,22 @@ export default function CodeEnter({navigation, route}) {
             </Text>
             )}
         /></View>
-        <TouchableOpacity style = {{alignSelf: 'center', backgroundColor: '#ffbc59', paddingHorizontal: 20, margin: 20, height: 50, borderRadius: 10, flexDirection: 'row', justifyContent: 'center'}}
-        onPress={() => 
-            confirmSignUp()
-        }>
-            <Text style = {{alignSelf: 'center', color: primaryColor, fontWeight: 'bold', fontSize: '20%'}}>Confirm</Text>
-        </TouchableOpacity>
+
+
+        <View style = {{flexDirection: 'row', justifyContent: 'center'}}>
+            <TouchableOpacity style = {{alignSelf: 'center', backgroundColor: '#38b6ff', paddingHorizontal: 20, margin: 20, height: 50, borderRadius: 10, flexDirection: 'row', justifyContent: 'center'}}
+            onPress={() => navigation.navigate('Username')}>
+                <Ionicons name="arrow-back-outline" size={'20%'} color="white" style = {{alignSelf: 'center', paddingRight: 10}}/>
+                <Text style = {{alignSelf: 'center', color: primaryColor, fontWeight: 'bold', fontSize: '20%'}}>Back</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style = {{alignSelf: 'center', backgroundColor: '#ffbc59', paddingHorizontal: 20, margin: 20, height: 50, borderRadius: 10, flexDirection: 'row', justifyContent: 'center'}}
+                onPress={() => 
+                    confirmSignUp()
+                }>
+                <Text style = {{alignSelf: 'center', color: primaryColor, fontWeight: 'bold', fontSize: '20%'}}>Confirm</Text>
+            </TouchableOpacity>
+        </View>
+        
 
         </View>
 
