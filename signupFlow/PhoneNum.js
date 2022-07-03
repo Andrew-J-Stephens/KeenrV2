@@ -18,10 +18,6 @@ const streak = 23;
 
 
 export default function PhoneNum({navigation, route}) {
-
-  console.log('phoneNum'); 
-  console.log(navigation);
-  console.log(route);
     
   const [value, setValue] = useState("");
   const [formattedValue, setFormattedValue] = useState("");

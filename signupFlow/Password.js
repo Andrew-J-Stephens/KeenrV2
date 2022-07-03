@@ -16,11 +16,7 @@ const parTextSize = "15%";
 const streak = 23;
 
 export default function Username({navigation, route}) {
-    console.log('nav');
-    console.log(navigation);
-    console.log(route);
-    // console.log(navigation.getState('userName'));
-
+    
     const [password, setPassword] = useState('');
     return(
 
