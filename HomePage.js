@@ -10,6 +10,8 @@ import Swiper from 'react-native-deck-swiper';
 import Card from './Card';
 import Vote from './Vote';
 
+import { Amplify, Auth } from 'aws-amplify';
+
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
@@ -22,12 +24,13 @@ const parTextSize = "15%";
 const streak = 23;
 
 export default function HomePage ({navigation}) {
-
+  
     const [isModal3Visible, setModal3Visible] = useState(false);
     const [isModalVisible, setModalVisible] = useState(false);
     const [isModal2Visible, setModal2Visible] = useState(false);
     const [isVotingVisible, setVotingVisible] = useState(true);
 
+    const [user, setUser] = useState({});
 
   const toggleModal = () => {
     setModalVisible(false);
@@ -57,7 +60,20 @@ export default function HomePage ({navigation}) {
     setModal2Visible(false);
   }
 
+  const getCurrentUser = async () => {
+    
+    const authUser = await Auth.currentAuthenticatedUser()
+      .then( user => {
+        
+        setUser(user);
+      });
+    
+  }
 
+  useEffect(() => {
+    getCurrentUser();
+  }, []);
+  
   return (
     
     <View style={styles.container}>
@@ -93,6 +109,7 @@ export default function HomePage ({navigation}) {
         <TouchableOpacity onPress={() => navigation.navigate('Account')} style = {{alignSelf: 'center'}}>
           <Ionicons name="person-circle-outline" size={48} color="black" style = {{alignSelf: 'center'}}/>
         </TouchableOpacity>
+          <Text style = {{width: 70, height: 70, alignSelf: 'left'}}>Hello, {user.username}</Text>
           <View style = {styles.box}>
           <Ionicons name="flame" size={24} color="black" style = {{paddingHorizontal: 5}}/>
           <Text style = {{fontSize: 24, fontWeight: 'bold'}}>{streak}</Text>

@@ -59,16 +59,16 @@ function HomeNav() {
 
     const navigation = useNavigation(); 
     return(
-    <View>
-    <TouchableOpacity onPress={() => navigation.goBack()} style = {{position: 'absolute', top: 60, left: 30}}>
-        <View>
-            <Ionicons name="chevron-back-circle-outline" size={48} color="black" style = {{alignSelf: 'center'}}/>
-        </View>
-    </TouchableOpacity>
-    <View style = {{top: 60, alignSelf: 'center'}}>
-        <UserIcon />
-    </View>
-    </View>
+      <View>
+      <TouchableOpacity onPress={() => navigation.goBack()} style = {{position: 'absolute', top: 60, left: 30}}>
+          <View>
+              <Ionicons name="chevron-back-circle-outline" size={48} color="black" style = {{alignSelf: 'center'}}/>
+          </View>
+      </TouchableOpacity>
+      <View style = {{top: 60, alignSelf: 'center'}}>
+          <UserIcon />
+      </View>
+      </View>
     );
     }
 
@@ -83,15 +83,15 @@ export default class AccountPage extends Component {
   render() {
 
     return (
-    <View style = {{flex: 3}}>
-    <View style = {{flex: 1}}>
-        <HomeNav />
-    </View>
-    <View style = {styles.background}>
-                {/* Basic Usage */}
-                <AccountList />
-            </View>
-    </View>
+      <View style = {{flex: 3}}>
+      <View style = {{flex: 1}}>
+          <HomeNav />
+      </View>
+      <View style = {styles.background}>
+                  {/* Basic Usage */}
+                  <AccountList />
+              </View>
+      </View>
     );
   }
 }

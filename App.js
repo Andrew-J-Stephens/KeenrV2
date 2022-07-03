@@ -2,9 +2,12 @@ import React, {useEffect, useState} from 'react';
 import { Text, View, TouchableOpacity, StatusBar, StyleSheet, ActivityIndicator, TouchableHighlightBase } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
+
 import HomeScreen from './HomePage';
 import Feed from './Feed';
 import Account from './AccountPage';
+
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationEvents } from 'react-navigation';
@@ -18,6 +21,7 @@ import CodeEnter from './signupFlow/CodeEnter';
 
 import { Amplify, Auth } from 'aws-amplify';
 import awsconfig from './src/aws-exports';
+import HomePage from './HomePage';
 // import Home from './src/Home';
 
 Amplify.configure(awsconfig);

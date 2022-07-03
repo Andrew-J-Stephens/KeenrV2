@@ -16,15 +16,14 @@ const streak = 23;
 export default function UserIcon(imgUrl) {
 
   return (
-    <View style = {{borderRadius: 40, overflow: 'hidden', 
-    
-    shadowColor: 'black',
-        shadowOffset: {width: 0, height: 1},
-        shadowOpacity: 0.8,
-        shadowRadius: 2
-    
+    <View style = {{
+      borderRadius: 40, overflow: 'hidden', 
+      shadowColor: 'black',
+      shadowOffset: {width: 0, height: 1},
+      shadowOpacity: 0.8,
+      shadowRadius: 2
     }}>
-        <Image
+      <Image
         source={require('./assets/water.jpg')}
         style = {{width: 70, height: 70,}}
       />
