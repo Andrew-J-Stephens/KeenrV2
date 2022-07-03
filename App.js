@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { Text, View, TouchableOpacity, StatusBar, StyleSheet, ActivityIndicator } from 'react-native';
+import { Text, View, TouchableOpacity, StatusBar, StyleSheet, ActivityIndicator, TouchableHighlightBase } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from './HomePage';
@@ -18,7 +18,7 @@ import CodeEnter from './signupFlow/CodeEnter';
 
 import { Amplify, Auth } from 'aws-amplify';
 import awsconfig from './src/aws-exports';
-import Home from './src/Home';
+// import Home from './src/Home';
 
 Amplify.configure(awsconfig);
 
@@ -31,62 +31,42 @@ const parTextSize = "15%";
 const streak = 23;
 
 
-//sample todo
+const Tab = createBottomTabNavigator();
 
-// export default function App() {
-//   return (
-//     <View style={styles.container}>
-//       <StatusBar />
-//       <Home />
-//     </View>
-//   );
-// }
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#fff',
-    flex: 1,
-  },
-});
+function Home() {
 
 
-
-// const Tab = createBottomTabNavigator();
-
-// function Home() {
+  return (
+    <Tab.Navigator
 
 
-//   return (
-//     <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarStyle: { position: 'absolute', backgroundColor: 'rgba(500, 500, 500, 0.7)', borderWidth: 0, padding: 10, height: '15%' },
+          headerShown: false, 
+          tabBarShowLabel: false,
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
 
+            if (route.name === 'Home') {
+              iconName = focused
+                ? 'grid-sharp'
+                : 'grid-outline';
+            } else if (route.name === 'Feed') {
+              iconName = focused ? 'heart-sharp': 'heart-outline' ;
+            }
 
-//         screenOptions={({ route }) => ({
-//           tabBarStyle: { position: 'absolute', backgroundColor: 'rgba(500, 500, 500, 0.7)', borderWidth: 0, padding: 10, height: '15%' },
-//           headerShown: false, 
-//           tabBarShowLabel: false,
-//           tabBarIcon: ({ focused, color, size }) => {
-//             let iconName;
+            return <Ionicons name={iconName} size={36} color={color}/>;
+          },
+          tabBarActiveTintColor: 'black',
+          tabBarInactiveTintColor: 'black',
+        })}
+      >
 
-//             if (route.name === 'Home') {
-//               iconName = focused
-//                 ? 'grid-sharp'
-//                 : 'grid-outline';
-//             } else if (route.name === 'Feed') {
-//               iconName = focused ? 'heart-sharp': 'heart-outline' ;
-//             }
-
-//             return <Ionicons name={iconName} size={36} color={color}/>;
-//           },
-//           tabBarActiveTintColor: 'black',
-//           tabBarInactiveTintColor: 'black',
-//         })}
-//       >
-
-//         <Tab.Screen name="Home" component={HomeScreen} />
-//         <Tab.Screen name="Feed" component={Feed} />
-//       </Tab.Navigator>
-//   );
-// }
+        <Tab.Screen name="Home" component={HomeScreen} />
+        <Tab.Screen name="Feed" component={Feed} />
+      </Tab.Navigator>
+  );
+}
 
 function Login() {
   const Stack = createStackNavigator();
@@ -100,65 +80,70 @@ function Login() {
   );
 }
 
-export default function App() {
+export default class AuthLoadingScreen extends React.Component {
 
-  const Stack = createStackNavigator();
+  constructor(props) {
+    super(props);
 
-
-  const [user, setUser] = useState(undefined); 
- 
-  const loadApp = async () => {
-    console.log('load app');
+    this.state = {
+      userToken: null
+    };
+  }
+    
+  loadApp = async () => {
+    
     const authUser = await Auth.currentAuthenticatedUser()
       .then( user => {
-        console.log(user);
-        useState({userToken: user.signInUserSession.accessToken.jwtToken})
-        console.log(user);
+        
+        this.setState({userToken: user.signInUserSession.refreshToken.token})
       })
       .catch( err => {
-        useState(null);
+        
         console.log('auth err:', err);
       })
         
-      this.props.navigation.navigate(user.userToken ? 'Main' : 'Login') 
-    console.log('auth user');
-    console.log(authUser);
-    setUser(authUser);
+    //this wasn't really working
+    // this.props.navigation.navigate(this.state.userToken ? 'Main' : 'Login');
   }
 
-  // useEffect( () => {
-  //   checkUser();
-  // },[]
-  // );
+  async componentDidMount() {
+    await this.loadApp();
+  }
 
-  loadApp();
-  return (
-
+  render() {
     
-    <NavigationContainer>
-      
-      <Stack.Navigator>
+    const Stack = createStackNavigator();
 
+      return (
 
+      <NavigationContainer>
+        
+        <Stack.Navigator>
 
-        <Stack.Screen name = "Login" component = {Login} options = {{headerShown: false}} />
-        <Stack.Screen
-          name="Main"
-          component={Home}
-          options={{ headerShown: false, gestureEnabled: false }}
-        />
-        <Stack.Screen name="Account" component={Account}
-        options={{ headerShown: false }}
-        />
-        <Stack.Screen name="CameraPage" component={CameraPage} 
-        options={{ headerShown: false }}/>
-        <Stack.Screen name="CameraPage2" component={CameraPage2} 
-        options={{ headerShown: false }}/>
-        <Stack.Screen name="CameraPage3" component={CameraPage3} 
-        options={{ headerShown: false }}/>
+          {/* displays different screen depending on whether there is a signed in user */}
+          {this.state.userToken ? (
+            <>
+               <Stack.Screen
+                  name="Main"
+                  component={Home}
+                  options={{ headerShown: false, gestureEnabled: false }}
+                />
+                <Stack.Screen name="Account" component={Account}
+                options={{ headerShown: false }}
+                />
+                <Stack.Screen name="CameraPage" component={CameraPage} 
+                options={{ headerShown: false }}/>
+                <Stack.Screen name="CameraPage2" component={CameraPage2} 
+                options={{ headerShown: false }}/>
+                <Stack.Screen name="CameraPage3" component={CameraPage3} 
+                options={{ headerShown: false }}/>
+            </>
+          ) : (
+            <Stack.Screen name = "Login" component = {Login} options = {{headerShown: false}} />
+          )}
 
-       
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
+        </Stack.Navigator>
+      </NavigationContainer>
+    );
+    }
 }
