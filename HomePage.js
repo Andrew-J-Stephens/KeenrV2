@@ -66,8 +66,10 @@ export default function HomePage ({navigation}) {
       .then( user => {
         
         setUser(user);
+      }).catch( err => {
+        
+        setUser(null);
       });
-    
   }
 
   useEffect(() => {

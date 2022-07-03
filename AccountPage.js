@@ -1,17 +1,17 @@
-import React, {Component} from 'react';
+import React, {Component, useState} from 'react';
 import {View, StyleSheet, Text, Button, TouchableOpacity, FlatList, RefreshControl} from 'react-native';
 import GridImageView from 'react-native-grid-image-viewer';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import UserIcon from './UserIcon';
 import MiniCard from './MiniCard';
+import useForceUpdate from 'use-force-update';
 
-import { Dimensions } from 'react-native';
-
+import  { Dimensions, Pressable } from 'react-native';
+import { Amplify, Auth } from 'aws-amplify';
 const wait = (timeout) => {
   return new Promise(resolve => setTimeout(resolve, timeout));
 }
-
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -44,7 +44,6 @@ function AccountList() {
         numColumns={2}
         keyExtractor={(item, index) => index.toString()}
         />
-
   );
 }
 
@@ -52,14 +51,17 @@ function HomeNav() {
 
   const [refreshing, setRefreshing] = React.useState(false);
 
-    const onRefresh = React.useCallback(() => {
-      setRefreshing(true);
-      wait(1000).then(() => setRefreshing(false));
-    }, []);
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    wait(1000).then(() => setRefreshing(false));
+  }, []);
 
-    const navigation = useNavigation(); 
-    return(
-      <View>
+  const navigation = useNavigation(); 
+  
+  const forceUpdate = useForceUpdate();
+
+  return(
+    <View>
       <TouchableOpacity onPress={() => navigation.goBack()} style = {{position: 'absolute', top: 60, left: 30}}>
           <View>
               <Ionicons name="chevron-back-circle-outline" size={48} color="black" style = {{alignSelf: 'center'}}/>
@@ -68,18 +70,26 @@ function HomeNav() {
       <View style = {{top: 60, alignSelf: 'center'}}>
           <UserIcon />
       </View>
-      </View>
-    );
-    }
+      <Pressable
+        onPress={() => {
+          
+          Auth.signOut().then(() => {
+            navigation.navigate('Login');  
+          });
+        }}
+        >
+            <Text>SIgn Out</Text> 
+      </Pressable>
+    </View>
+  );
+}
 
 export default class AccountPage extends Component {
-
 
   constructor(props) {
     super(props);
   }
 
-  
   render() {
 
     return (

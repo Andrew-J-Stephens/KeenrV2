@@ -71,6 +71,28 @@ function Home() {
   );
 }
 
+function Landing() {
+  const Stack = createStackNavigator();
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Main"
+        component={Home}
+        options={{ headerShown: false, gestureEnabled: false }}
+      />
+      <Stack.Screen name="Account" component={Account}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen name="CameraPage" component={CameraPage} 
+        options={{ headerShown: false }}/>
+      <Stack.Screen name="CameraPage2" component={CameraPage2} 
+        options={{ headerShown: false }}/>
+      <Stack.Screen name="CameraPage3" component={CameraPage3} 
+        options={{ headerShown: false }}/>
+    </Stack.Navigator>
+  )
+}
+
 function Login() {
   const Stack = createStackNavigator();
   return(
@@ -84,75 +106,64 @@ function Login() {
 }
 
 export default class AuthLoadingScreen extends React.Component {
-
+  
+  
   constructor(props) {
+    
     super(props);
-
     this.state = {
-      userToken: undefined
+      userToken: undefined,
+      initialRoute: 'Login'
     };
   }
-    
+
   loadApp = async () => {
     
     const authUser = await Auth.currentAuthenticatedUser()
       .then( user => {
         
-        this.setState({userToken: user.signInUserSession.refreshToken.token})
+        this.setState({userToken: user.signInUserSession.refreshToken.token});
+        this.setState({initialRoute: 'Landing'});
+
       })
       .catch( err => {
         
+        this.setState({userToken: null});
+        this.setState({initialRoute: 'Login'});
+
         console.log('auth err:', err);
-      })
+      });
         
+      console.log('STATE', this.state);
     //this wasn't really working
-    // this.props.navigation.navigate(this.state.userToken ? 'Main' : 'Login');
   }
 
   async componentDidMount() {
     await this.loadApp();
   }
+  
+  async getInitialRoute() {return this.state.initialRoute};
 
   render() {
     
     if (this.state.userToken === undefined) {
+      var initialRoute = 'Login';
       return (
         <View style={styles.container}>
           <ActivityIndicator size="large" color="#fff" />
         </View>     
       )
-    }
+    } else var initialRoute = 'Landing';
 
     const Stack = createStackNavigator();
-
+    
       return (
 
       <NavigationContainer>
         
-        <Stack.Navigator>
-
-          {/* displays different screen depending on whether there is a signed in user */}
-          {this.state.userToken ? (
-            <>
-               <Stack.Screen
-                  name="Main"
-                  component={Home}
-                  options={{ headerShown: false, gestureEnabled: false }}
-                />
-                <Stack.Screen name="Account" component={Account}
-                options={{ headerShown: false }}
-                />
-                <Stack.Screen name="CameraPage" component={CameraPage} 
-                options={{ headerShown: false }}/>
-                <Stack.Screen name="CameraPage2" component={CameraPage2} 
-                options={{ headerShown: false }}/>
-                <Stack.Screen name="CameraPage3" component={CameraPage3} 
-                options={{ headerShown: false }}/>
-            </>
-          ) : (
-            <Stack.Screen name = "Login" component = {Login} options = {{headerShown: false}} />
-          )}
-
+        <Stack.Navigator initialRouteName={initialRoute}>
+          <Stack.Screen name = "Login" component = {Login} options = {{headerShown: false}} />
+          <Stack.Screen name = "Landing" component = {Landing} options = {{headerShown: false}} />
         </Stack.Navigator>
       </NavigationContainer>
     );
