@@ -19,7 +19,7 @@ import Password from './signupFlow/Password';
 import PhoneNum from './signupFlow/PhoneNum';
 import CodeEnter from './signupFlow/CodeEnter';
 
-import { Amplify, Auth, DataStore } from 'aws-amplify';
+import { Amplify, Auth, DataStore, Storage } from 'aws-amplify';
 import awsconfig from './src/aws-exports';
 import HomePage from './HomePage';
 
@@ -135,11 +135,8 @@ export default class AuthLoadingScreen extends React.Component {
         console.log('auth err:', err);
       });
       
-      console.log('STATE', this.state);
-      console.log(authUser);
-      // var id = Auth.currentSession();
-      // console.log('id:', id);
-    //this wasn't really working
+      // console.log('STATE', this.state);
+      // console.log(authUser);
   }
 
   async componentDidMount() {

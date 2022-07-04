@@ -10,8 +10,10 @@ import Swiper from 'react-native-deck-swiper';
 import Card from './Card';
 import Vote from './Vote';
 
-import { Auth, DataStore } from 'aws-amplify';
+import { Auth, DataStore, Storage } from 'aws-amplify';
 
+import ImageUploader from './src/components/ImageUploader';
+import * as ImagePicker from 'expo-image-picker';
 
 import { Challenge } from './src/models';
 
@@ -146,6 +148,29 @@ export default function HomePage ({navigation}) {
   //     console.log(' add challenge error:', e.message);
   //   }
   // }
+
+  const [photo, setPhoto] = useState(null);
+  const handleChoosePhoto = async () => {
+    
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if ( !result.cancelled ) {
+      const photoResponse = await fetch(result.uri);
+      const blob = await photoResponse.blob();
+
+      const filename = result.uri.split('/').at(-1);
+      
+      const response = await Storage.put(filename, blob, {
+        contentType: 'image/jpg'
+      });
+    }
+  };
+
   
   return (
     
@@ -173,12 +198,13 @@ export default function HomePage ({navigation}) {
                     </TouchableOpacity>
                 </View>
                 <View style = {{width: 50, height: 50, backgroundColor: 'rgba(52, 52, 52, 0.5)', borderRadius: 30, position: 'absolute', bottom: 10, left: 100, flexDirection: 'column', justifyContent: 'center'}}>
-                    <TouchableOpacity onPress = {() => {
+                    {/* <TouchableOpacity onPress = {() => {
                       console.log('do something new');
-                      // addChallenge();
-                    }}>
-                    <Ionicons name="alert-outline" size={32} color= 'white' style = {{alignSelf: 'center'}}/>
-                    </TouchableOpacity>
+                      
+                    }}> */}
+                    {/* <Ionicons name="alert-outline" size={32} color= 'white' style = {{alignSelf: 'center'}}/> */}
+                    {/* </TouchableOpacity> */}
+                    <ImageUploader photo={photo} handleChoosePhoto={handleChoosePhoto} />
                 </View>
                 <View style = {{width: 50, height: 50, backgroundColor: 'rgba(52, 52, 52, 0.5)', borderRadius: 30, position: 'absolute', bottom: 10, right: 10, flexDirection: 'column', justifyContent: 'center'}}>
                     <TouchableOpacity onPress={() => openCameraDaily()}>
