@@ -10,7 +10,12 @@ import Swiper from 'react-native-deck-swiper';
 import Card from './Card';
 import Vote from './Vote';
 
-import { Amplify, Auth } from 'aws-amplify';
+import { Auth, DataStore } from 'aws-amplify';
+
+
+import { Challenge } from './src/models';
+
+
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -25,13 +30,18 @@ const streak = 23;
 
 export default function HomePage ({navigation}) {
   
-    const [isModal3Visible, setModal3Visible] = useState(false);
-    const [isModalVisible, setModalVisible] = useState(false);
-    const [isModal2Visible, setModal2Visible] = useState(false);
-    const [isVotingVisible, setVotingVisible] = useState(true);
+  const [isModal3Visible, setModal3Visible] = useState(false);
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [isModal2Visible, setModal2Visible] = useState(false);
+  const [isVotingVisible, setVotingVisible] = useState(true);
 
-    const [user, setUser] = useState({});
+  const [user, setUser] = useState({})
 
+  const [dailyChallenge, setDailyChallenge] = useState({});
+  const [weeklyChallenge, setWeeklyChallenge] = useState({});
+  const [monthlyChallenge, setMonthlyChallenge] = useState({});
+
+    
   const toggleModal = () => {
     setModalVisible(false);
   };
@@ -72,9 +82,70 @@ export default function HomePage ({navigation}) {
       });
   }
 
+
+  const getCurrentChallenges = async function () {
+    
+    const dailyChallenges = DataStore.observeQuery(Challenge, c => c.type('eq', 1)).subscribe((snapshot) => {
+      //isSynced can be used to show a loading spinner when the list is being loaded. 
+      const { items, isSynced } = snapshot;
+      
+      setDailyChallenge(items.pop());
+    });
+
+    const weeklyChallenges = DataStore.observeQuery(Challenge, c => c.type('eq', 2)).subscribe((snapshot) => {
+      //isSynced can be used to show a loading spinner when the list is being loaded. 
+      const { items, isSynced } = snapshot;
+      
+      setWeeklyChallenge(items.pop());
+    });
+      
+
+    const monthlyChallenges = DataStore.observeQuery(Challenge, c => c.type('eq', 3)).subscribe((snapshot) => {
+      //isSynced can be used to show a loading spinner when the list is being loaded. 
+      const { items, isSynced } = snapshot;
+      
+      setMonthlyChallenge(items.pop());
+    });
+    
+  } 
+
   useEffect(() => {
+
     getCurrentUser();
+
+    getCurrentChallenges();
+    
   }, []);
+
+  
+
+  // const addChallenge = async function() {
+  //   console.log('add challenge/new model');
+  //   const content = "Run more mile2";
+  //   const title = "Title: Run a mile updates";
+
+  //   const user = await Auth.currentAuthenticatedUser();
+
+  //   try {
+
+  //     const response = await DataStore.save(
+  //       new Challenge(
+  //         { 
+  //           title: title, 
+  //           type: 1, 
+  //           active: true 
+  //         }
+  //       )
+  //     );
+      
+
+  //     console.log(response);
+  //     ConsoleLogger(response);
+
+  //   } catch (e) {
+  //     console.log(' add challenge error:', e.message);
+  //   }
+  // }
   
   return (
     
@@ -93,11 +164,20 @@ export default function HomePage ({navigation}) {
                     Daily Challenge
                 </Text>
                 <Text style = {{fontSize: subTextSize, color: 'white', paddingTop: 20}}>
-                    Drink a bottle of water
+                    {/* Drink a bottle of water */}
+                    {dailyChallenge.title}
                 </Text>
                 <View style = {{width: 50, height: 50, backgroundColor: 'rgba(52, 52, 52, 0.5)', borderRadius: 30, position: 'absolute', bottom: 10, left: 10, flexDirection: 'column', justifyContent: 'center'}}>
                     <TouchableOpacity onPress = {toggleModal}>
                     <Ionicons name="arrow-back-outline" size={32} color= 'white' style = {{alignSelf: 'center'}}/>
+                    </TouchableOpacity>
+                </View>
+                <View style = {{width: 50, height: 50, backgroundColor: 'rgba(52, 52, 52, 0.5)', borderRadius: 30, position: 'absolute', bottom: 10, left: 100, flexDirection: 'column', justifyContent: 'center'}}>
+                    <TouchableOpacity onPress = {() => {
+                      console.log('do something new');
+                      // addChallenge();
+                    }}>
+                    <Ionicons name="alert-outline" size={32} color= 'white' style = {{alignSelf: 'center'}}/>
                     </TouchableOpacity>
                 </View>
                 <View style = {{width: 50, height: 50, backgroundColor: 'rgba(52, 52, 52, 0.5)', borderRadius: 30, position: 'absolute', bottom: 10, right: 10, flexDirection: 'column', justifyContent: 'center'}}>
@@ -144,7 +224,8 @@ export default function HomePage ({navigation}) {
                     Monthly Challenge
                 </Text>
                 <Text style = {{fontSize: subTextSize, color: 'white', paddingTop: 20}}>
-                    Drink a bucket of water
+                    {/* Drink a bucket of water */}
+                    {monthlyChallenge.title}
                 </Text>
                 <View style = {{width: 50, height: 50, backgroundColor: 'rgba(52, 52, 52, 0.5)', borderRadius: 30, position: 'absolute', bottom: 10, left: 10, flexDirection: 'column', justifyContent: 'center'}}>
                     <TouchableOpacity onPress = {toggleModal2}>
@@ -169,7 +250,7 @@ export default function HomePage ({navigation}) {
                     Weekly Challenge
                 </Text>
                 <Text style = {{fontSize: subTextSize, color: 'white', paddingTop: 20}}>
-                    Drink a litre of water
+                    {weeklyChallenge.title}
                 </Text>
                 <View style = {{width: 50, height: 50, backgroundColor: 'rgba(52, 52, 52, 0.5)', borderRadius: 30, position: 'absolute', bottom: 10, left: 10, flexDirection: 'column', justifyContent: 'center'}}>
                     <TouchableOpacity onPress = {toggleModal3}>

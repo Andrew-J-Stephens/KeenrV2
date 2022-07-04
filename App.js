@@ -19,10 +19,9 @@ import Password from './signupFlow/Password';
 import PhoneNum from './signupFlow/PhoneNum';
 import CodeEnter from './signupFlow/CodeEnter';
 
-import { Amplify, Auth } from 'aws-amplify';
+import { Amplify, Auth, DataStore } from 'aws-amplify';
 import awsconfig from './src/aws-exports';
 import HomePage from './HomePage';
-// import Home from './src/Home';
 
 Amplify.configure(awsconfig);
 
@@ -89,6 +88,8 @@ function Landing() {
         options={{ headerShown: false }}/>
       <Stack.Screen name="CameraPage3" component={CameraPage3} 
         options={{ headerShown: false }}/>
+      {/* <Stack.Screen name="CameraPage4" component={CameraPage3} 
+        options={{ headerShown: false }}/> */}
     </Stack.Navigator>
   )
 }
