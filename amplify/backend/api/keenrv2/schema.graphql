@@ -1,0 +1,25 @@
+type Challenge @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  title: String!
+  type: Int!
+  active: Boolean!
+  posts: [Post] @hasMany
+}
+
+type Post @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  title: String!
+  userID: String!
+  username: String!
+  challenge: Challenge @belongsTo
+  comments: [Comment] @hasMany
+}
+
+type Comment @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  userID: String!
+  username: String!
+  post: Post @belongsTo
+  content: String!
+}
+ 

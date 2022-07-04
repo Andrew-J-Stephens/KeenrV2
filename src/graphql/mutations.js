@@ -1,72 +1,105 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const createBlog = /* GraphQL */ `
-  mutation CreateBlog(
-    $input: CreateBlogInput!
-    $condition: ModelBlogConditionInput
+export const createChallenge = /* GraphQL */ `
+  mutation CreateChallenge(
+    $input: CreateChallengeInput!
+    $condition: ModelChallengeConditionInput
   ) {
-    createBlog(input: $input, condition: $condition) {
+    createChallenge(input: $input, condition: $condition) {
       id
-      name
+      title
+      type
+      active
       posts {
         items {
           id
           title
+          userID
+          username
           createdAt
           updatedAt
-          blogPostsId
+          _version
+          _deleted
+          _lastChangedAt
+          challengePostsId
         }
         nextToken
+        startedAt
       }
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;
-export const updateBlog = /* GraphQL */ `
-  mutation UpdateBlog(
-    $input: UpdateBlogInput!
-    $condition: ModelBlogConditionInput
+export const updateChallenge = /* GraphQL */ `
+  mutation UpdateChallenge(
+    $input: UpdateChallengeInput!
+    $condition: ModelChallengeConditionInput
   ) {
-    updateBlog(input: $input, condition: $condition) {
+    updateChallenge(input: $input, condition: $condition) {
       id
-      name
+      title
+      type
+      active
       posts {
         items {
           id
           title
+          userID
+          username
           createdAt
           updatedAt
-          blogPostsId
+          _version
+          _deleted
+          _lastChangedAt
+          challengePostsId
         }
         nextToken
+        startedAt
       }
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;
-export const deleteBlog = /* GraphQL */ `
-  mutation DeleteBlog(
-    $input: DeleteBlogInput!
-    $condition: ModelBlogConditionInput
+export const deleteChallenge = /* GraphQL */ `
+  mutation DeleteChallenge(
+    $input: DeleteChallengeInput!
+    $condition: ModelChallengeConditionInput
   ) {
-    deleteBlog(input: $input, condition: $condition) {
+    deleteChallenge(input: $input, condition: $condition) {
       id
-      name
+      title
+      type
+      active
       posts {
         items {
           id
           title
+          userID
+          username
           createdAt
           updatedAt
-          blogPostsId
+          _version
+          _deleted
+          _lastChangedAt
+          challengePostsId
         }
         nextToken
+        startedAt
       }
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;
@@ -78,28 +111,45 @@ export const createPost = /* GraphQL */ `
     createPost(input: $input, condition: $condition) {
       id
       title
-      blog {
+      userID
+      username
+      challenge {
         id
-        name
+        title
+        type
+        active
         posts {
           nextToken
+          startedAt
         }
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       comments {
         items {
           id
+          userID
+          username
           content
           createdAt
           updatedAt
+          _version
+          _deleted
+          _lastChangedAt
           postCommentsId
         }
         nextToken
+        startedAt
       }
       createdAt
       updatedAt
-      blogPostsId
+      _version
+      _deleted
+      _lastChangedAt
+      challengePostsId
     }
   }
 `;
@@ -111,28 +161,45 @@ export const updatePost = /* GraphQL */ `
     updatePost(input: $input, condition: $condition) {
       id
       title
-      blog {
+      userID
+      username
+      challenge {
         id
-        name
+        title
+        type
+        active
         posts {
           nextToken
+          startedAt
         }
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       comments {
         items {
           id
+          userID
+          username
           content
           createdAt
           updatedAt
+          _version
+          _deleted
+          _lastChangedAt
           postCommentsId
         }
         nextToken
+        startedAt
       }
       createdAt
       updatedAt
-      blogPostsId
+      _version
+      _deleted
+      _lastChangedAt
+      challengePostsId
     }
   }
 `;
@@ -144,28 +211,45 @@ export const deletePost = /* GraphQL */ `
     deletePost(input: $input, condition: $condition) {
       id
       title
-      blog {
+      userID
+      username
+      challenge {
         id
-        name
+        title
+        type
+        active
         posts {
           nextToken
+          startedAt
         }
         createdAt
         updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       comments {
         items {
           id
+          userID
+          username
           content
           createdAt
           updatedAt
+          _version
+          _deleted
+          _lastChangedAt
           postCommentsId
         }
         nextToken
+        startedAt
       }
       createdAt
       updatedAt
-      blogPostsId
+      _version
+      _deleted
+      _lastChangedAt
+      challengePostsId
     }
   }
 `;
@@ -176,25 +260,41 @@ export const createComment = /* GraphQL */ `
   ) {
     createComment(input: $input, condition: $condition) {
       id
+      userID
+      username
       post {
         id
         title
-        blog {
+        userID
+        username
+        challenge {
           id
-          name
+          title
+          type
+          active
           createdAt
           updatedAt
+          _version
+          _deleted
+          _lastChangedAt
         }
         comments {
           nextToken
+          startedAt
         }
         createdAt
         updatedAt
-        blogPostsId
+        _version
+        _deleted
+        _lastChangedAt
+        challengePostsId
       }
       content
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       postCommentsId
     }
   }
@@ -206,25 +306,41 @@ export const updateComment = /* GraphQL */ `
   ) {
     updateComment(input: $input, condition: $condition) {
       id
+      userID
+      username
       post {
         id
         title
-        blog {
+        userID
+        username
+        challenge {
           id
-          name
+          title
+          type
+          active
           createdAt
           updatedAt
+          _version
+          _deleted
+          _lastChangedAt
         }
         comments {
           nextToken
+          startedAt
         }
         createdAt
         updatedAt
-        blogPostsId
+        _version
+        _deleted
+        _lastChangedAt
+        challengePostsId
       }
       content
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       postCommentsId
     }
   }
@@ -236,25 +352,41 @@ export const deleteComment = /* GraphQL */ `
   ) {
     deleteComment(input: $input, condition: $condition) {
       id
+      userID
+      username
       post {
         id
         title
-        blog {
+        userID
+        username
+        challenge {
           id
-          name
+          title
+          type
+          active
           createdAt
           updatedAt
+          _version
+          _deleted
+          _lastChangedAt
         }
         comments {
           nextToken
+          startedAt
         }
         createdAt
         updatedAt
-        blogPostsId
+        _version
+        _deleted
+        _lastChangedAt
+        challengePostsId
       }
       content
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
       postCommentsId
     }
   }

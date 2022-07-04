@@ -1,17 +1,17 @@
 {
-  "projectName": "KeenrV2",
-  "version": "3.1",
-  "frontend": "javascript",
-  "providers": [
-    "awscloudformation"
-  ],
-  "javascript": {
-    "framework": "react-native",
-    "config": {
-      "SourceDir": "src",
-      "DistributionDir": "/",
-      "BuildCommand": "npm.cmd run-script build",
-      "StartCommand": "npm.cmd run-script start"
+    "projectName": "KeenrV2",
+    "version": "3.1",
+    "frontend": "javascript",
+    "providers": [
+        "awscloudformation"
+    ],
+    "javascript": {
+        "framework": "react-native",
+        "config": {
+            "SourceDir": "src",
+            "DistributionDir": "/",
+            "BuildCommand": "npm.cmd run-script build",
+            "StartCommand": "npm.cmd run-script start"
+        }
     }
-  }
 }
