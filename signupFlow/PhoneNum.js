@@ -18,22 +18,22 @@ const streak = 23;
 
 
 export default function PhoneNum({navigation, route}) {
-    
+  
   const [value, setValue] = useState("");
   const [formattedValue, setFormattedValue] = useState("");
   const [valid, setValid] = useState(false);
   const [showMessage, setShowMessage] = useState(false);
   const phoneInput = useRef<PhoneInput>(null);
 
-  async function signInWithPhoneNumber(phoneNumber) {
-    const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
-    setConfirm(confirmation);
-  }
+  // async function signInWithPhoneNumber(phoneNumber) {
+  //   const confirmation = await uth().signInWithPhoneNumber(phoneNumber);
+  //   setConfirm(confirmation);
+  // }
 
-  function next(){
-    // signInWithPhoneNumber("");
-    navigation.navigate('CodeEnter', {userName: route.params.userName, password: route.params.password});
-  }
+  // function next(){
+  //   // signInWithPhoneNumber("");
+  //   navigation.navigate('CodeEnter', {userName: route.params.userName, password: route.params.password});
+  // }
 
   async function createAccount (params)  {
     
@@ -48,8 +48,10 @@ export default function PhoneNum({navigation, route}) {
             }
           }
         );
+
+        console.log(user);
         
-        next() 
+        navigation.navigate('CodeEnter', {userName: route.params.userName, password: route.params.password});
 
     } catch (err) {
         console.warn('error signing up, ', err);

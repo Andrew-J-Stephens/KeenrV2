@@ -121,7 +121,7 @@ export default class AuthLoadingScreen extends React.Component {
     
     const authUser = await Auth.currentAuthenticatedUser()
       .then( user => {
-        
+        console.log(user);
         this.setState({userToken: user.signInUserSession.refreshToken.token});
         this.setState({initialRoute: 'Landing'});
 
@@ -133,8 +133,11 @@ export default class AuthLoadingScreen extends React.Component {
 
         console.log('auth err:', err);
       });
-        
+      
       console.log('STATE', this.state);
+      console.log(authUser);
+      // var id = Auth.currentSession();
+      // console.log('id:', id);
     //this wasn't really working
   }
 
@@ -146,7 +149,7 @@ export default class AuthLoadingScreen extends React.Component {
 
   render() {
     
-    if (this.state.userToken === undefined) {
+    if (this.state.userToken === undefined ) {
       var initialRoute = 'Login';
       return (
         <View style={styles.container}>
@@ -154,6 +157,7 @@ export default class AuthLoadingScreen extends React.Component {
         </View>     
       )
     } else var initialRoute = 'Landing';
+
 
     const Stack = createStackNavigator();
     

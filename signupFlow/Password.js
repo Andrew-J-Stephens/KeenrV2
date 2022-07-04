@@ -33,6 +33,7 @@ export default function Username({navigation, route}) {
         <TouchableOpacity style = {{alignSelf: 'center', backgroundColor: '#ff5857', paddingHorizontal: 20, margin: 20, height: 50, borderRadius: 10, flexDirection: 'row', justifyContent: 'center'}}
             onPress={() => 
                 
+                // navigation.navigate('PhoneNum', {userName: route.params.userName, password: password})
                 navigation.navigate('PhoneNum', {userName: route.params.userName, password: password})
             }
         >
