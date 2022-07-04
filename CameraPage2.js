@@ -27,7 +27,8 @@ function HomeNav() {
     );
     }
 
-export default function CameraPage2() {
+export default function CameraPage2({route}) {
+  
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
   const [camera, setCamera] = useState(null);
   const [image, setImage] = useState(null);
@@ -39,9 +40,11 @@ useEffect(() => {
 })();
   }, []);
 const takePicture = async () => {
+
     if(camera){
         const data = await camera.takePictureAsync(null)
-        setImage(data.uri);
+        // setImage(data.uri);
+        await route.params.uploadPhotoHandler( JSON.stringify(data.uri) );
     }
   }
 

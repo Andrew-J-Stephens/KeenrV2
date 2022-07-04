@@ -30,7 +30,7 @@ function HomeNav() {
     );
     }
 
-export default function CameraPage() {
+export default function CameraPage({route}) {
 
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
   const [camera, setCamera] = useState(null);
@@ -44,20 +44,15 @@ export default function CameraPage() {
     })();
   }, []);
 
-const takePicture = async () => {
+  
+  const takePicture = async () => {
 
     if (camera) {
+
       const data = await camera.takePictureAsync(null);  
-
-      const photoResponse = await fetch(data.uri);
-      const blob = await photoResponse.blob();
-
-      const filename = data.uri.split('/').at(-1);
-
-      const response = await Storage.put(filename, blob, {
-        contentType: 'image/jpg'
-      });
+      await route.params.uploadPhotoHandler( JSON.stringify(data.uri) );
     }
+
   }
 
   if (hasCameraPermission === false) {

@@ -36,7 +36,7 @@ const streak = 23;
 
 const Tab = createBottomTabNavigator();
 
-function Home() {
+const Home = ({route}) => {
 
   return (
     <Tab.Navigator
@@ -64,32 +64,35 @@ function Home() {
         })}
       >
 
-        <Tab.Screen name="Home" component={HomeScreen} />
+        <Tab.Screen name="Home" component={HomeScreen} initialParams={{...route.params}}/>
         <Tab.Screen name="Feed" component={Feed} />
       </Tab.Navigator>
   );
 }
 
-function Landing() {
+
+
+const Landing = ({route}) =>  {
+  
   const Stack = createStackNavigator();
+  
   return (
     <Stack.Navigator>
       <Stack.Screen
         name="Main"
         component={Home}
-        options={{ headerShown: false, gestureEnabled: false }}
+        options={{ headerShown: false, gestureEnabled: false }} 
+        initialParams={{...route.params}}
       />
       <Stack.Screen name="Account" component={Account}
         options={{ headerShown: false }}
       />
       <Stack.Screen name="CameraPage" component={CameraPage} 
-        options={{ headerShown: false }}/>
-      <Stack.Screen name="CameraPage2" component={CameraPage2} 
-        options={{ headerShown: false }}/>
+        options={{ headerShown: false }} initialParams={{...route.params}}/>
+      <Stack.Screen name="CameraPage2" component={CameraPage2}
+        options={{ headerShown: false }} initialParams={{...route.params}}/>
       <Stack.Screen name="CameraPage3" component={CameraPage3} 
-        options={{ headerShown: false }}/>
-      {/* <Stack.Screen name="CameraPage4" component={CameraPage3} 
-        options={{ headerShown: false }}/> */}
+        options={{ headerShown: false }} initialParams={{...route.params}}/>
     </Stack.Navigator>
   )
 }
@@ -117,6 +120,21 @@ export default class AuthLoadingScreen extends React.Component {
       initialRoute: 'Login'
     };
   }
+
+  uploadPhotoHandler = async (photoURI) => {
+
+    const photo = JSON.parse(photoURI);
+    const filename = photo.split('/').at(-1);
+
+    const photoResponse = await fetch(photo);
+    const blob = await photoResponse.blob();
+
+    const response = await Storage.put(filename, blob, {
+      contentType: 'image/jpg'
+    });
+
+    return filename;
+  } 
 
   loadApp = async () => {
     
@@ -161,14 +179,14 @@ export default class AuthLoadingScreen extends React.Component {
     
       return (
 
-      <NavigationContainer>
-        
-        <Stack.Navigator initialRouteName={initialRoute}>
-          <Stack.Screen name = "Login" component = {Login} options = {{headerShown: false}} />
-          <Stack.Screen name = "Landing" component = {Landing} options = {{headerShown: false}} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    );
+        <NavigationContainer>
+          
+          <Stack.Navigator initialRouteName={initialRoute} initialParams={{uploadPhotoHandler: this.uploadPhotoHandler}}>
+            <Stack.Screen name = "Login" component = {Login} options = {{headerShown: false}} />
+            <Stack.Screen name = "Landing" component = {Landing} options = {{headerShown: false}} initialParams={{uploadPhotoHandler: this.uploadPhotoHandler}} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      );
     }
 }
 

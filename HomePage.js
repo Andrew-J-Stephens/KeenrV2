@@ -2,6 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { SafeAreaView, StyleSheet, Text, View, TouchableOpacity, Button, Image, TouchableHighlight } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { NavigationContainer } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import Modal from "react-native-modal";
 import { Dimensions } from 'react-native';
 import React, { useState, useEffect } from 'react';
@@ -30,8 +31,9 @@ const subTextSize = 18;
 const parTextSize = "15";
 const streak = 23;
 
-export default function HomePage ({navigation}) {
-  
+export default function HomePage ({navigation, route}) {
+  console.log('home page', route);
+  // console.log('home nav', navigation);
   const [isModal3Visible, setModal3Visible] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
   const [isModal2Visible, setModal2Visible] = useState(false);
@@ -150,6 +152,7 @@ export default function HomePage ({navigation}) {
   // }
 
   const [photo, setPhoto] = useState(null);
+
   const handleChoosePhoto = async () => {
     
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -160,16 +163,10 @@ export default function HomePage ({navigation}) {
     });
 
     if ( !result.cancelled ) {
-      const photoResponse = await fetch(result.uri);
-      const blob = await photoResponse.blob();
 
-      const filename = result.uri.split('/').at(-1);
-      
-      const response = await Storage.put(filename, blob, {
-        contentType: 'image/jpg'
-      });
+      await route.params.uploadPhotoHandler( JSON.stringify(result.uri) );
     }
-  };
+  }
 
   
   return (
