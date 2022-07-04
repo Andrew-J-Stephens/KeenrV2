@@ -14,9 +14,9 @@ const thisPrompt = "Drink a bottle of water";
 const primaryColor = '#ffffff';
 const secondaryColor = '#0000000';
 const accentColor = '#e0e0e0';
-const headerTextSize = "30%";
-const subTextSize = "18%";
-const parTextSize = "15%";
+const headerTextSize = "30";
+const subTextSize = 18;
+const parTextSize = 15;
 const streak = 23;
 
 
@@ -49,8 +49,12 @@ export default function Card() {
         <View style = {styles.info}>
             <Ionicons name="person-circle-outline" size={48} color="white" style = {{alignSelf: 'center'}}/>
             <View style = {{flexDirection: 'column', alignSelf: 'center', paddingLeft: 10}}>
-                <Text style = {{fontWeight: 'bold', fontSize: subTextSize, color: 'white'}}>{username}</Text>
-                <Text style = {{fontSize: parTextSize, color: 'white'}}>{thisPrompt}</Text>
+                <Text style = {{fontWeight: 'bold', 
+                    fontSize: subTextSize, 
+                    color: 'white'}}>{username}</Text>
+                <Text style = {{ 
+                    fontSize: parTextSize,
+                    color: 'white'}}>{thisPrompt}</Text>
             </View>
         </View>
     </View>
