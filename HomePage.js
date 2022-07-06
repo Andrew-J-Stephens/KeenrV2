@@ -16,7 +16,7 @@ import { Auth, DataStore, Storage } from 'aws-amplify';
 import ImageUploader from './src/components/ImageUploader';
 import * as ImagePicker from 'expo-image-picker';
 
-import { Challenge } from './src/models';
+import { Challenge, Post, Comment } from './src/models';
 
 
 
@@ -32,7 +32,7 @@ const parTextSize = "15";
 const streak = 23;
 
 export default function HomePage ({navigation, route}) {
-  console.log('home page', route);
+  
   // console.log('home nav', navigation);
   const [isModal3Visible, setModal3Visible] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
@@ -80,6 +80,7 @@ export default function HomePage ({navigation, route}) {
       .then( user => {
         
         setUser(user);
+        // console.log(user);
       }).catch( err => {
         
         setUser(null);
@@ -93,63 +94,75 @@ export default function HomePage ({navigation, route}) {
       //isSynced can be used to show a loading spinner when the list is being loaded. 
       const { items, isSynced } = snapshot;
       
-      setDailyChallenge(items.pop());
+      if (items) setDailyChallenge(items.pop());
+      else setDailyChallenge(null)
     });
 
     const weeklyChallenges = DataStore.observeQuery(Challenge, c => c.type('eq', 2)).subscribe((snapshot) => {
       //isSynced can be used to show a loading spinner when the list is being loaded. 
       const { items, isSynced } = snapshot;
-      
-      setWeeklyChallenge(items.pop());
+
+      if (items) setWeeklyChallenge(items.pop());
+      else setWeeklyChallenge(null)
     });
       
 
     const monthlyChallenges = DataStore.observeQuery(Challenge, c => c.type('eq', 3)).subscribe((snapshot) => {
       //isSynced can be used to show a loading spinner when the list is being loaded. 
       const { items, isSynced } = snapshot;
-      
-      setMonthlyChallenge(items.pop());
+
+      if (items) setMonthlyChallenge(items.pop());
+      else setMonthlyChallenge(null);
     });
     
   } 
 
   useEffect(() => {
-
+    
     getCurrentUser();
 
     getCurrentChallenges();
     
   }, []);
 
+  getActiveChallenge = (type) => {
+
+    switch (type) { 
+      case 1:
+        return dailyChallenge;
+      case 2:
+        return weeklyChallenge;
+      case 3: 
+        return monthlyChallenge;
+      default:
+         return null;
+    }
+  }
+
   
+  makePost = async (params) => {
+    
+    try {
 
-  // const addChallenge = async function() {
-  //   console.log('add challenge/new model');
-  //   const content = "Run more mile2";
-  //   const title = "Title: Run a mile updates";
+      const user = await Auth.currentAuthenticatedUser();
 
-  //   const user = await Auth.currentAuthenticatedUser();
+      const response = await DataStore.save(
+        new Post(
+          { 
+            challenge: getActiveChallenge(params.type), 
+            username: user.username,
+            filename: params.filename,
+          }
+        )
+      );
 
-  //   try {
-
-  //     const response = await DataStore.save(
-  //       new Challenge(
-  //         { 
-  //           title: title, 
-  //           type: 1, 
-  //           active: true 
-  //         }
-  //       )
-  //     );
-      
-
-  //     console.log(response);
-  //     ConsoleLogger(response);
-
-  //   } catch (e) {
-  //     console.log(' add challenge error:', e.message);
-  //   }
-  // }
+      if (response) route.params.filename = null;
+    
+    } catch (e) {
+      console.log(' add post error:', e.message);
+    }
+  }
+  if (route.params.filename) makePost(route.params);
 
   const [photo, setPhoto] = useState(null);
 
@@ -204,7 +217,11 @@ export default function HomePage ({navigation, route}) {
                     <ImageUploader photo={photo} handleChoosePhoto={handleChoosePhoto} />
                 </View>
                 <View style = {{width: 50, height: 50, backgroundColor: 'rgba(52, 52, 52, 0.5)', borderRadius: 30, position: 'absolute', bottom: 10, right: 10, flexDirection: 'column', justifyContent: 'center'}}>
-                    <TouchableOpacity onPress={() => openCameraDaily()}>
+                    <TouchableOpacity onPress={() => { 
+                      openCameraDaily();
+                      // console.log('make post');
+                      // makePost();
+                    }}>
                     <Ionicons name="camera" size={32} color= 'white' style = {{alignSelf: 'center'}}/>
                     </TouchableOpacity>
                 </View>
@@ -262,6 +279,7 @@ export default function HomePage ({navigation, route}) {
                 </View>
             </View>
         </Modal>
+
         <Modal isVisible={isModal3Visible} onBackdropPress={() => setModal3Visible(false)}>
             <View style = {styles.modalBox3}>
                 {/*<View style = {{width: 50, height: 50, backgroundColor: 'rgba(52, 52, 52, 0.5)', borderRadius: 30, position: 'absolute', top: 10, left: 10, flexDirection: 'column', justifyContent: 'center'}}>
@@ -287,10 +305,14 @@ export default function HomePage ({navigation, route}) {
                 </View>
             </View>
         </Modal>
-      </View>
-      <View style = {styles.footer}>
 
       </View>
+      
+      <View >
+        <Text>{route.params.filename}</Text>
+      </View>
+
+      <View style = {styles.footer}></View>
     </View>
   );
 }

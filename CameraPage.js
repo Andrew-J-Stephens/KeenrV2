@@ -30,7 +30,7 @@ function HomeNav() {
     );
     }
 
-export default function CameraPage({route}) {
+export default function CameraPage({navigation, route}) {
 
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
   const [camera, setCamera] = useState(null);
@@ -50,7 +50,15 @@ export default function CameraPage({route}) {
     if (camera) {
 
       const data = await camera.takePictureAsync(null);  
-      await route.params.uploadPhotoHandler( JSON.stringify(data.uri) );
+
+      //actually should be this
+      // const filename = await route.params.uploadPhotoHandler( JSON.stringify(data.uri) );
+      const filename = '436EC07D-DEED-4916-A65A-61A527B5E1E5.jpg';
+      
+      if (filename) {
+        navigation.navigate('Home', {filename, ChallengeType});
+      }
+
     }
 
   }

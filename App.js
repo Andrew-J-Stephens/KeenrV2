@@ -121,21 +121,6 @@ export default class AuthLoadingScreen extends React.Component {
     };
   }
 
-  uploadPhotoHandler = async (photoURI) => {
-
-    const photo = JSON.parse(photoURI);
-    const filename = photo.split('/').at(-1);
-
-    const photoResponse = await fetch(photo);
-    const blob = await photoResponse.blob();
-
-    const response = await Storage.put(filename, blob, {
-      contentType: 'image/jpg'
-    });
-
-    return filename;
-  } 
-
   loadApp = async () => {
     
     const authUser = await Auth.currentAuthenticatedUser()
@@ -163,8 +148,55 @@ export default class AuthLoadingScreen extends React.Component {
   
   async getInitialRoute() {return this.state.initialRoute};
 
-  render() {
+  
+  uploadPhotoHandler = async (photoURI) => {
+
+    const photo = JSON.parse(photoURI);
+    const filename = photo.split('/').at(-1);
+
+    const photoResponse = await fetch(photo);
+    const blob = await photoResponse.blob();
+
+    const response = await Storage.put(filename, blob, {
+      contentType: 'image/jpg'
+    });
+
+    if (response.key) {
+      return response.key
+    } else throw 'Could not upload photo';
     
+  }
+
+  addChallenge = async function() {
+    console.log('add challenge/new model');
+    const content = "Run more mile2";
+    const title = "Title: Run a mile updates";
+
+    const user = await Auth.currentAuthenticatedUser();
+
+    try {
+
+      const response = await DataStore.save(
+        new Challenge(
+          { 
+            title: title, 
+            type: 1, 
+            active: true 
+          }
+        )
+      );
+      
+
+      console.log(response);
+      ConsoleLogger(response);
+
+    } catch (e) {
+      console.log(' add challenge error:', e.message);
+    }
+  }
+
+  render() {
+
     if (this.state.userToken === undefined ) {
       var initialRoute = 'Login';
       return (
