@@ -11,8 +11,7 @@ export const onCreateChallenge = /* GraphQL */ `
       posts {
         items {
           id
-          title
-          userID
+          filename
           username
           createdAt
           updatedAt
@@ -42,8 +41,7 @@ export const onUpdateChallenge = /* GraphQL */ `
       posts {
         items {
           id
-          title
-          userID
+          filename
           username
           createdAt
           updatedAt
@@ -73,8 +71,7 @@ export const onDeleteChallenge = /* GraphQL */ `
       posts {
         items {
           id
-          title
-          userID
+          filename
           username
           createdAt
           updatedAt
@@ -98,8 +95,7 @@ export const onCreatePost = /* GraphQL */ `
   subscription OnCreatePost {
     onCreatePost {
       id
-      title
-      userID
+      filename
       username
       challenge {
         id
@@ -145,8 +141,7 @@ export const onUpdatePost = /* GraphQL */ `
   subscription OnUpdatePost {
     onUpdatePost {
       id
-      title
-      userID
+      filename
       username
       challenge {
         id
@@ -192,8 +187,7 @@ export const onDeletePost = /* GraphQL */ `
   subscription OnDeletePost {
     onDeletePost {
       id
-      title
-      userID
+      filename
       username
       challenge {
         id
@@ -243,8 +237,7 @@ export const onCreateComment = /* GraphQL */ `
       username
       post {
         id
-        title
-        userID
+        filename
         username
         challenge {
           id
@@ -286,8 +279,7 @@ export const onUpdateComment = /* GraphQL */ `
       username
       post {
         id
-        title
-        userID
+        filename
         username
         challenge {
           id
@@ -329,8 +321,7 @@ export const onDeleteComment = /* GraphQL */ `
       username
       post {
         id
-        title
-        userID
+        filename
         username
         challenge {
           id

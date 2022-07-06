@@ -11,8 +11,7 @@ export const getChallenge = /* GraphQL */ `
       posts {
         items {
           id
-          title
-          userID
+          filename
           username
           createdAt
           updatedAt
@@ -96,8 +95,7 @@ export const getPost = /* GraphQL */ `
   query GetPost($id: ID!) {
     getPost(id: $id) {
       id
-      title
-      userID
+      filename
       username
       challenge {
         id
@@ -148,8 +146,7 @@ export const listPosts = /* GraphQL */ `
     listPosts(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
-        title
-        userID
+        filename
         username
         challenge {
           id
@@ -193,8 +190,7 @@ export const syncPosts = /* GraphQL */ `
     ) {
       items {
         id
-        title
-        userID
+        filename
         username
         challenge {
           id
@@ -231,8 +227,7 @@ export const getComment = /* GraphQL */ `
       username
       post {
         id
-        title
-        userID
+        filename
         username
         challenge {
           id
@@ -279,8 +274,7 @@ export const listComments = /* GraphQL */ `
         username
         post {
           id
-          title
-          userID
+          filename
           username
           createdAt
           updatedAt
@@ -321,8 +315,7 @@ export const syncComments = /* GraphQL */ `
         username
         post {
           id
-          title
-          userID
+          filename
           username
           createdAt
           updatedAt

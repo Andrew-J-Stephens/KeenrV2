@@ -30,8 +30,7 @@ export declare class Challenge {
 
 export declare class Post {
   readonly id: string;
-  readonly title: string;
-  readonly userID: string;
+  readonly filename: string;
   readonly username: string;
   readonly challenge?: Challenge | null;
   readonly comments?: (Comment | null)[] | null;
