@@ -141,14 +141,14 @@ export default function HomePage ({navigation, route}) {
 
   
   makePost = async (params) => {
-    console.log('make post', params);    
+    // console.log('make post', params);    
     try {
 
       const user = await Auth.currentAuthenticatedUser();
 
 
       const challenge = getActiveChallenge(params.ChallengeType);
-      console.log('challenge', challenge);
+      // console.log('challenge', challenge);
 
       const post = new Post(
         { 
@@ -157,7 +157,7 @@ export default function HomePage ({navigation, route}) {
           filename: params.filename,
         }
       );
-      console.log(post);
+      // console.log(post);
       const response = await DataStore.save(
         post
       );
