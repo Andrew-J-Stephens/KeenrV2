@@ -22,5 +22,23 @@
         "keenrv2c25570d7c25570d7": {}
       }
     }
+  },
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-keenrv2-dev-195725-authRole",
+      "UnauthRoleArn": "arn:aws:iam::708565822424:role/amplify-keenrv2-dev-195725-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::708565822424:role/amplify-keenrv2-dev-195725-authRole",
+      "Region": "us-east-2",
+      "DeploymentBucketName": "amplify-keenrv2-dev-195725-deployment",
+      "UnauthRoleName": "amplify-keenrv2-dev-195725-unauthRole",
+      "StackName": "amplify-keenrv2-dev-195725",
+      "StackId": "arn:aws:cloudformation:us-east-2:708565822424:stack/amplify-keenrv2-dev-195725/65a531a0-fd87-11ec-bd31-0abbdfaae0b0",
+      "AmplifyAppId": "d8f4hkbqyhki6"
+    },
+    "categories": {
+      "auth": {
+        "keenrv2c25570d7c25570d7": {}
+      }
+    }
   }
 }
