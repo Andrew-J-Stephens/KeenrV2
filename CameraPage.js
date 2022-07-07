@@ -52,8 +52,8 @@ export default function CameraPage({navigation, route}) {
       const data = await camera.takePictureAsync(null);  
 
       //actually should be this
-      // const filename = await route.params.uploadPhotoHandler( JSON.stringify(data.uri) );
-      const filename = '436EC07D-DEED-4916-A65A-61A527B5E1E5.jpg';
+      const filename = await route.params.uploadPhotoHandler( JSON.stringify(data.uri) );
+      // const filename = '436EC07D-DEED-4916-A65A-61A527B5E1E5.jpg';
       
       if (filename) {
         navigation.navigate('Home', {filename, ChallengeType});
