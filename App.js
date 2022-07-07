@@ -198,12 +198,14 @@ export default class AuthLoadingScreen extends React.Component {
   render() {
 
     if (this.state.userToken === undefined ) {
-      var initialRoute = 'Login';
+      
       return (
         <View style={styles.container}>
           <ActivityIndicator size="large" color="#fff" />
         </View>     
       )
+    } else if (this.state.userToken == null) {
+      var initialRoute = 'Login';
     } else var initialRoute = 'Landing';
 
 
