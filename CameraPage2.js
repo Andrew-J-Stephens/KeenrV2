@@ -27,7 +27,7 @@ function HomeNav() {
     );
     }
 
-export default function CameraPage2({route}) {
+export default function CameraPage2({navigation, route}) {
   
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
   const [camera, setCamera] = useState(null);
