@@ -8,7 +8,11 @@ import MiniCard from './MiniCard';
 import useForceUpdate from 'use-force-update';
 
 import  { Dimensions, Pressable } from 'react-native';
-import { Amplify, Auth } from 'aws-amplify';
+import { Amplify, Auth, DataStore } from 'aws-amplify';
+import { Challenge, Post, Comment } from './src/models';
+import { getPixelSizeForLayoutSize } from 'react-native/Libraries/Utilities/PixelRatio';
+
+
 const wait = (timeout) => {
   return new Promise(resolve => setTimeout(resolve, timeout));
 }
@@ -16,19 +20,34 @@ const wait = (timeout) => {
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-function AccountList() {
+
+function AccountList({posts}) {
+  // console.log('account list posts', posts);
 
   const [refreshing, setRefreshing] = React.useState(false);
+  const [userPosts, setUserPosts] = React.useState();
 
   const onRefresh = React.useCallback(() => {
+    
     setRefreshing(true);
-    wait(1000).then(() => setRefreshing(false));
+
+    posts.getPost()
+      .then( (data) => {
+        setUserPosts(data);
+        setRefreshing(false)
+      })
+      .catch( () => {
+        setRefreshing(false);
+      });
+    
+
+    
   }, []);
 
   return(
 
     <FlatList
-        data={[1,2,3,4,5,6,7,8,9]}
+        data={userPosts}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
@@ -37,7 +56,7 @@ function AccountList() {
         }
         renderItem={({ item }) => (
             <View style = {{paddingLeft: windowWidth*0.0325, paddingTop: windowWidth*0.0325}}>
-            <MiniCard />
+            <MiniCard post={item}/>
             </View>
         )}
         //Setting the number of column
@@ -85,9 +104,36 @@ function HomeNav() {
 }
 
 export default class AccountPage extends Component {
-
+  
   constructor(props) {
     super(props);
+
+    this.state = {
+      posts: [],
+    }
+
+    // this.state.posts = await this.getPost();
+    // console.log('res' ,res);
+  }
+
+  
+  getPost = async (params) =>  {
+    console.log('get posts');
+    try {
+
+      const user = await Auth.currentAuthenticatedUser();
+
+      const response = await DataStore.query(Post, p => p.username('eq', user.username).challenge('ne', null));
+      // console.log('data store response', response);
+
+      if (response) {
+        
+        return Promise.resolve(response);
+      }
+      
+    } catch (e) {
+      console.log(' get post error:', e.message);
+    }
   }
 
   render() {
@@ -99,7 +145,7 @@ export default class AccountPage extends Component {
       </View>
       <View style = {styles.background}>
                   {/* Basic Usage */}
-                  <AccountList />
+                  <AccountList posts={{getPost: this.getPost}}/>
               </View>
       </View>
     );

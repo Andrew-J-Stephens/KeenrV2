@@ -141,19 +141,25 @@ export default function HomePage ({navigation, route}) {
 
   
   makePost = async (params) => {
-    
+    console.log('make post', params);    
     try {
 
       const user = await Auth.currentAuthenticatedUser();
 
+
+      const challenge = getActiveChallenge(params.ChallengeType);
+      console.log('challenge', challenge);
+
+      const post = new Post(
+        { 
+          challenge: challenge,
+          username: user.username,
+          filename: params.filename,
+        }
+      );
+      console.log(post);
       const response = await DataStore.save(
-        new Post(
-          { 
-            challenge: getActiveChallenge(params.type), 
-            username: user.username,
-            filename: params.filename,
-          }
-        )
+        post
       );
 
       if (response) route.params.filename = null;
