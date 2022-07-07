@@ -111,9 +111,6 @@ export default class AccountPage extends Component {
     this.state = {
       posts: [],
     }
-
-    // this.state.posts = await this.getPost();
-    // console.log('res' ,res);
   }
 
   

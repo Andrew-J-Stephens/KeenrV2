@@ -37,7 +37,7 @@ const streak = 23;
 const Tab = createBottomTabNavigator();
 
 const Home = ({route}) => {
-
+  console.log('home', route);
   return (
     <Tab.Navigator
 
@@ -73,7 +73,7 @@ const Home = ({route}) => {
 
 
 const Landing = ({route}) =>  {
-  
+  console.log('landing', route);
   const Stack = createStackNavigator();
   
   return (
@@ -83,6 +83,7 @@ const Landing = ({route}) =>  {
         component={Home}
         options={{ headerShown: false, gestureEnabled: false }} 
         initialParams={{...route.params}}
+        
       />
       <Stack.Screen name="Account" component={Account}
         options={{ headerShown: false }}
@@ -125,7 +126,7 @@ export default class AuthLoadingScreen extends React.Component {
     
     const authUser = await Auth.currentAuthenticatedUser()
       .then( user => {
-        console.log(user);
+        // console.log(user);
         this.setState({userToken: user.signInUserSession.refreshToken.token});
         this.setState({initialRoute: 'Landing'});
 
@@ -217,7 +218,7 @@ export default class AuthLoadingScreen extends React.Component {
           
           <Stack.Navigator initialRouteName={initialRoute} initialParams={{uploadPhotoHandler: this.uploadPhotoHandler}}>
             <Stack.Screen name = "Login" component = {Login} options = {{headerShown: false}} />
-            <Stack.Screen name = "Landing" component = {Landing} options = {{headerShown: false}} initialParams={{uploadPhotoHandler: this.uploadPhotoHandler}} />
+            <Stack.Screen name = "Landing" component = {Landing} options = {{headerShown: false}} initialParams={{uploadPhotoHandler: this.uploadPhotoHandler, route: 'Feed'}} />
           </Stack.Navigator>
         </NavigationContainer>
       );
