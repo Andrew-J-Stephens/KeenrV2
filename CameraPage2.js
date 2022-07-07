@@ -41,10 +41,15 @@ useEffect(() => {
   }, []);
 const takePicture = async () => {
 
-    if(camera){
-        const data = await camera.takePictureAsync(null)
-        // setImage(data.uri);
-        await route.params.uploadPhotoHandler( JSON.stringify(data.uri) );
+    if (camera) {
+
+      const data = await camera.takePictureAsync(null)
+      
+      const filename = await route.params.uploadPhotoHandler( JSON.stringify(data.uri) );
+      
+      if (filename) {
+        navigation.navigate('Home', {filename, ChallengeType});
+      }
     }
   }
 
