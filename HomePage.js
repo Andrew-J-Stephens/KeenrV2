@@ -231,7 +231,7 @@ export default function HomePage ({navigation, route}) {
         <TouchableOpacity onPress={() => navigation.navigate('Account')} style = {{alignSelf: 'center'}}>
           <Ionicons name="person-circle-outline" size={48} color="black" style = {{alignSelf: 'center'}}/>
         </TouchableOpacity>
-          <Text style = {{width: 70, height: 70, alignSelf: 'center'}}>Hello, {user.username}</Text>
+          <Text style = {{width: 70, height: 70, alignSelf: 'center'}}>Hello, {user?.username}</Text>
           <View style = {styles.box}>
           <Ionicons name="flame" size={24} color="black" style = {{paddingHorizontal: 5}}/>
           <Text style = {{fontSize: 24, fontWeight: 'bold'}}>{streak}</Text>
