@@ -67,7 +67,6 @@ export default class Vote extends Component {
       cardIndex: 0
     }
 
-    // await this.getFeed();
   }
 
   renderCard = (card, index) => {
@@ -81,7 +80,6 @@ export default class Vote extends Component {
   onSwiped = (type) => {
     console.log(`on swiped ${type}`);
     console.log('index', this.state.cardIndex);
-    this.state.cardIndex ++;
   }
 
   onSwipedAllCards = () => {
@@ -108,14 +106,14 @@ export default class Vote extends Component {
       const response = await DataStore.query(Post, p => p.username('eq', user.username).challenge('ne', null));
       // console.log('ds ', response);
 
-      // var posts = response;
       var images = [];
-      for (var post in response) {
-        
-        var image = await Storage.get(post?.filename);
+      for (var i in response) {
 
+        var post = response[i];
+
+        var image = await Storage.get(post?.filename);
+        
         images.push(image);
-        // images.push(image);
       }
       
       if (response) {
@@ -130,11 +128,8 @@ export default class Vote extends Component {
   }
 
   async componentDidMount() {
-    console.log('mounted');
-
-    // console.log('GET FEED');
-    this.getFeed()
     
+    this.getFeed()
       .then( (data) => {
 
         // console.log('FEED',data);
@@ -142,12 +137,9 @@ export default class Vote extends Component {
         var feed = [];
         data.response.forEach((val, i) => {
           
-          feed.push({post: data.response[i], image:  data.images[i] }); 
+          feed.push({post: data.response[i], image: data.images[i] });
         })
-        // console.log('FEED WITH IMAGW',feed);
-
-        // this.setState({feed: data.response});
-        // this.setState({images: data.images});
+        
         this.setState({feed});
         this.setState({gotFeed: true});
       })
@@ -158,7 +150,7 @@ export default class Vote extends Component {
   }
   
   render () {
-    console.log('Vote render');
+    
     return (
       <View style={styles.container}>
         {/* <Image
@@ -170,22 +162,21 @@ export default class Vote extends Component {
             cardIndex={this.state.cardIndex}
             renderCard={(card) => {
 
-              console.log('render card vote page', card);
-              // console.log(this.state.cardIndex);
+              // console.log('render card vote page', card);
+              
               if (card == undefined && this.state.gotFeed == true) {
-                console.log('need to exit');
-                // return this.onSwipedAllCards();
-                // this.swiper.state.swipedAllCards = true;
-                // this.swiper.onSwipedAll();
+                
                 this.props.hideVote(false);
               }
-              // if (card == undefined)
               
+              if (card != undefined) 
                 return (
+                  
                     <View style = {{top: '30%', flexDirection: 'row', justifyContent: 'center'}}>
-                        <Card post={card} img={ {uri: card?.image} }/>
+                        <Card post={card} />
                     </View>
-                )
+                );
+              else return <></>
             }}
           ref={swiper => {
             this.swiper = swiper

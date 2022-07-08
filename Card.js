@@ -23,11 +23,12 @@ const streak = 23;
 
 
 
-export default function Card({post, img}) {
-    console.log('in card, post:', post)
+export default function Card({post}) {
+    console.log('in card, post:', post);
+    
+
     const [heartColor, setHeartColor] = useState('white');
-    // const [image, setImage] = useState({uri: img});
-    const [image, setImage] = useState(img);
+    const [image, setImage] = useState({uri: post?.image});
     
     function like() {
         if (heartColor == 'white'){
@@ -37,27 +38,18 @@ export default function Card({post, img}) {
         }
     }
 
-
     async function getImage() {
-        console.log('get IMAGE');
-        const img = await Storage.get(post?.post.filename);
-        // const user = await Auth.currentAuthenticatedUser();
-        setImage({uri: img});
+        // console.log('get IMAGE');
         
-        // setImage(post?.image);
-        // console.log('img', img);
-        // console.log('got image', image);
-        console.log('post image', post?.image);
-        // setImage({uri: post?.image});
-        // setImage(img);
+        // const image = post.image;
+        // const image = await Storage.get(post?.post.filename);
+        // setImage({uri: image});
+        
+        setImage({uri: post?.image});
     }
 
     useEffect( () => {
         getImage();
-        // setImage({uri: post?.image});
-        // setImage({uri: img});
-        //  setImage(img);
-        console.log('got image', image);
     }, []);
 
   return (
