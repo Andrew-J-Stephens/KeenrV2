@@ -70,8 +70,6 @@ const Home = ({route}) => {
   );
 }
 
-
-
 const Landing = ({route}) =>  {
   console.log('landing', route);
   const Stack = createStackNavigator();

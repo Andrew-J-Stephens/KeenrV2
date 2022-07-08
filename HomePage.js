@@ -119,6 +119,8 @@ export default function HomePage ({navigation, route}) {
 
   useEffect(() => {
     
+
+    // if (route.params.route == 'Feed') navigation.navigate('Feed');
     getCurrentUser();
 
     getCurrentChallenges();
@@ -205,7 +207,7 @@ export default function HomePage ({navigation, route}) {
                     Daily Challenge
                 </Text>
                 <Text style = {{fontSize: subTextSize, color: 'white', paddingTop: 20}}>
-                    {/* Drink a bottle of water */}
+                    
                     {dailyChallenge.title}
                 </Text>
                 <View style = {{width: 50, height: 50, backgroundColor: 'rgba(52, 52, 52, 0.5)', borderRadius: 30, position: 'absolute', bottom: 10, left: 10, flexDirection: 'column', justifyContent: 'center'}}>
@@ -214,10 +216,7 @@ export default function HomePage ({navigation, route}) {
                     </TouchableOpacity>
                 </View>
                 <View style = {{width: 50, height: 50, backgroundColor: 'rgba(52, 52, 52, 0.5)', borderRadius: 30, position: 'absolute', bottom: 10, left: 100, flexDirection: 'column', justifyContent: 'center'}}>
-                    {/* <TouchableOpacity onPress = {() => {
-                      console.log('do something new');
-                      
-                    }}> */}
+                    
                     {/* <Ionicons name="alert-outline" size={32} color= 'white' style = {{alignSelf: 'center'}}/> */}
                     {/* </TouchableOpacity> */}
                     <ImageUploader photo={photo} handleChoosePhoto={handleChoosePhoto} />
