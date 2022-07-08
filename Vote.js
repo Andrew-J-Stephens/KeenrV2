@@ -48,6 +48,9 @@ import Swiper from 'react-native-deck-swiper';
 import Card from './Card';
 import React, {Component, useState} from 'react';
 
+import { Amplify, Auth, DataStore, Storage } from 'aws-amplify';
+import { Challenge, Post, Comment } from './src/models';
+
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
@@ -55,11 +58,16 @@ export default class Vote extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      cards: [1],
+      cards: [],
+      feed: [],
+      images: [],
+      gotFeed: false,
       swipedAllCards: false,
       swipeDirection: '',
       cardIndex: 0
     }
+
+    // await this.getFeed();
   }
 
   renderCard = (card, index) => {
@@ -71,31 +79,111 @@ export default class Vote extends Component {
   };
 
   onSwiped = (type) => {
-    console.log(`on swiped ${type}`)
+    console.log(`on swiped ${type}`);
+    console.log('index', this.state.cardIndex);
+    this.state.cardIndex ++;
   }
 
   onSwipedAllCards = () => {
     this.setState({
       swipedAllCards: true
-    })
+    });
+
+    this.props.hideVote(false);
   };
 
   swipeLeft = () => {
+    
     this.swiper.swipeLeft()
   };
 
+  
+
+  getFeed = async (params) =>  {
+    
+    try {
+
+      const user = await Auth.currentAuthenticatedUser();
+
+      const response = await DataStore.query(Post, p => p.username('eq', user.username).challenge('ne', null));
+      // console.log('ds ', response);
+
+      // var posts = response;
+      var images = [];
+      for (var post in response) {
+        
+        var image = await Storage.get(post?.filename);
+
+        images.push(image);
+        // images.push(image);
+      }
+      
+      if (response) {
+        
+        return Promise.resolve({response, images});
+      }
+      
+    } catch (e) {
+      console.log(' get post error:', e.message);
+      return Promise.reject(e.message);
+    }
+  }
+
+  async componentDidMount() {
+    console.log('mounted');
+
+    // console.log('GET FEED');
+    this.getFeed()
+    
+      .then( (data) => {
+
+        // console.log('FEED',data);
+
+        var feed = [];
+        data.response.forEach((val, i) => {
+          
+          feed.push({post: data.response[i], image:  data.images[i] }); 
+        })
+        // console.log('FEED WITH IMAGW',feed);
+
+        // this.setState({feed: data.response});
+        // this.setState({images: data.images});
+        this.setState({feed});
+        this.setState({gotFeed: true});
+      })
+      .catch( () => {
+        this.setState({feed: []});
+        console.log('caught');
+      });
+  }
+  
   render () {
+    console.log('Vote render');
     return (
       <View style={styles.container}>
-        <Image
+        {/* <Image
             style = {{borderRadius: 10, width: 200, height: 200, alignSelf: 'center'}}
             source={require('./assets/icon.png')}
-        />
+        /> */}
         <Swiper
+            cards={this.state.feed}
+            cardIndex={this.state.cardIndex}
             renderCard={(card) => {
+
+              console.log('render card vote page', card);
+              // console.log(this.state.cardIndex);
+              if (card == undefined && this.state.gotFeed == true) {
+                console.log('need to exit');
+                // return this.onSwipedAllCards();
+                // this.swiper.state.swipedAllCards = true;
+                // this.swiper.onSwipedAll();
+                this.props.hideVote(false);
+              }
+              // if (card == undefined)
+              
                 return (
                     <View style = {{top: '30%', flexDirection: 'row', justifyContent: 'center'}}>
-                        <Card />
+                        <Card post={card} img={ {uri: card?.image} }/>
                     </View>
                 )
             }}
@@ -108,11 +196,9 @@ export default class Vote extends Component {
           onSwipedRight={() => this.onSwiped('right')}
           onSwipedTop={() => this.onSwiped('top')}
           onSwipedBottom={() => this.onSwiped('bottom')}
-          cards={['1', '2', '3', '4', '5']}
-          cardIndex={this.state.cardIndex}
           cardVerticalMargin={80}
-          onSwipedAll={() => {this.props.hideVote(false)}}
-          stackSize={3}
+          onSwipedAll={() => {this.onSwipedAllCards()}}
+          // stackSize={3}
           stackSeparation={15}
           animateOverlayLabelsOpacity
           animateCardOpacity

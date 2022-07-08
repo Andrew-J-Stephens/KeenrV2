@@ -3,12 +3,14 @@ import { SafeAreaView, StyleSheet, Text, View, TouchableOpacity, Image } from 'r
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { NavigationContainer } from '@react-navigation/native';
 import { Dimensions } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+
+import { Amplify, Auth, DataStore, Storage } from 'aws-amplify';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 const username = "AndrewS";
-const thisPrompt = "Drink a bottle of water";
+const thisPrompt = "Drink  two bottle of water";
 
 
 const primaryColor = '#ffffff';
@@ -21,9 +23,12 @@ const streak = 23;
 
 
 
-export default function Card() {
-
+export default function Card({post, img}) {
+    console.log('in card, post:', post)
     const [heartColor, setHeartColor] = useState('white');
+    // const [image, setImage] = useState({uri: img});
+    const [image, setImage] = useState(img);
+    
     function like() {
         if (heartColor == 'white'){
             setHeartColor("#ff5340")
@@ -32,11 +37,34 @@ export default function Card() {
         }
     }
 
+
+    async function getImage() {
+        console.log('get IMAGE');
+        const img = await Storage.get(post?.post.filename);
+        // const user = await Auth.currentAuthenticatedUser();
+        setImage({uri: img});
+        
+        // setImage(post?.image);
+        // console.log('img', img);
+        // console.log('got image', image);
+        console.log('post image', post?.image);
+        // setImage({uri: post?.image});
+        // setImage(img);
+    }
+
+    useEffect( () => {
+        getImage();
+        // setImage({uri: post?.image});
+        // setImage({uri: img});
+        //  setImage(img);
+        console.log('got image', image);
+    }, []);
+
   return (
     <View style = {styles.container}>
         <Image
         style = {{width: windowWidth*0.95, height: windowHeight*0.5, borderRadius: 10}}
-        source={require('./assets/water.jpg')}
+        source={image}
         />
         <View style = {styles.likeButton}>
             <TouchableOpacity style = {{alignSelf: 'center'}} onPress = {()=> like()}>
@@ -51,10 +79,10 @@ export default function Card() {
             <View style = {{flexDirection: 'column', alignSelf: 'center', paddingLeft: 10}}>
                 <Text style = {{fontWeight: 'bold', 
                     fontSize: subTextSize, 
-                    color: 'white'}}>{username}</Text>
+                    color: 'white'}}>{<Text >{post?.post.username}</Text>}</Text>
                 <Text style = {{ 
                     fontSize: parTextSize,
-                    color: 'white'}}>{thisPrompt}</Text>
+                    color: 'white'}}>{<Text >{post?.post.challenge.title}</Text>}</Text>
             </View>
         </View>
     </View>
