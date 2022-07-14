@@ -103,7 +103,7 @@ export default class Vote extends Component {
 
       const user = await Auth.currentAuthenticatedUser();
 
-      const response = await DataStore.query(Post, p => p.username('eq', user.username).challenge('ne', null));
+      const response = await DataStore.query(Post, p => p.username('ne', user.username).challenge('ne', null));
       // console.log('ds ', response);
 
       var images = [];
