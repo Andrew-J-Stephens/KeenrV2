@@ -10,6 +10,7 @@ import UserIcon from './UserIcon';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 const weeklyColor = '#ffbc59';
+const ChallengeType = 2;
 
 function HomeNav() {
     const navigation = useNavigation(); 
