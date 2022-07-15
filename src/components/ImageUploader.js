@@ -1,29 +1,21 @@
 import React from 'react';
 import {View, Image, Button, StyleSheet} from 'react-native';
+import { SafeAreaView, Text, TouchableOpacity, TouchableHighlight } from 'react-native';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 const ImageUploader = ({handleChoosePhoto, photo}) => {
   return (
-    <View style={styles.imageView}>
-      {photo && <Image source={{uri: photo.uri}} style={styles.photo} />}
-      <Button
-        style={styles.photoBtn}
-        title="Choose Photo"
-        onPress={handleChoosePhoto}
-      />
-    </View>
+          <TouchableOpacity onPress = {handleChoosePhoto}>
+          {photo && <Image source={{uri: photo.uri}} style={styles.photo} />}
+            <Ionicons name="arrow-up" size={32} color= 'white' style = {{alignSelf: 'center'}}/>
+          </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   imageView: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingBottom: 15,
-  },
-  photo: {
-    width: 200,
-    height: 200,
+    width: '100%',
+    height: '100%',
   },
 });
 

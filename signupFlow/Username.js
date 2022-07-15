@@ -27,16 +27,28 @@ export default function Username({navigation, route}) {
             style = {{borderRadius: 10, width: 200, height: 200, alignSelf: 'center'}}
             source={require('../assets/icon.png')}
         />
-        <TextInput autoFocus={true} onChangeText={(username) => setUserName(username) } value={userName}  placeholder = "Username" style = {{backgroundColor: '#f6f6f6', width: '80%', height: 50, alignSelf: 'center', borderRadius: 10, paddingHorizontal: 20, fontSize: '15%'}}>
+        <TextInput autoFocus={false} onChangeText={(username) => setUserName(username) } value={userName}  placeholder = "Username" style = {{backgroundColor: '#f6f6f6', width: '80%', height: 50, alignSelf: 'center', borderRadius: 10, paddingHorizontal: 20, fontSize: '15%'}}>
 
         </TextInput>
-        <TouchableOpacity style = {{alignSelf: 'center', backgroundColor: '#ff5857', paddingHorizontal: 20, margin: 20, height: 50, borderRadius: 10, flexDirection: 'row', justifyContent: 'center'}}
+        <TouchableOpacity style = {{alignSelf: 'center', backgroundColor: '#ff5857', paddingHorizontal: 20, margin: 20, marginBottom: 200, height: 50, borderRadius: 10, flexDirection: 'row', justifyContent: 'center'}}
             onPress={ function() { 
                 navigation.navigate('Password', {userName: userName});
             }
         }
         >
-            <Text style = {{alignSelf: 'center', color: primaryColor, fontWeight: 'bold', fontSize: '20%'}}>Next</Text>
+            <Text style = {{alignSelf: 'center', color: primaryColor, fontWeight: 'bold', fontSize: '20%'}}>Register My Account</Text>
+            <Ionicons name="arrow-forward-outline" size={'20%'} color="white" style = {{alignSelf: 'center', paddingLeft: 10}}/>
+        </TouchableOpacity>
+        <View style = {{alignSelf: 'center', paddingHorizontal: 20, flexDirection: 'row', justifyContent: 'center'}}>
+            <Text style = {{fontWeight: 'bold', color: 'lightgrey'}}>Already have an account?</Text>
+        </View>
+        <TouchableOpacity style = {{alignSelf: 'center', backgroundColor: '#53a3db', paddingHorizontal: 20, margin: 10, height: 40, borderRadius: 10, flexDirection: 'row', justifyContent: 'center'}}
+            onPress={ function() { 
+                navigation.navigate('PhoneNum', {userName: userName});
+            }
+        }
+        >
+            <Text style = {{alignSelf: 'center', color: primaryColor, fontWeight: 'bold', fontSize: '15%'}}>Login</Text>
             <Ionicons name="arrow-forward-outline" size={'20%'} color="white" style = {{alignSelf: 'center', paddingLeft: 10}}/>
         </TouchableOpacity>
 
