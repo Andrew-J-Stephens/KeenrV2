@@ -132,7 +132,7 @@ export default class Vote extends Component {
     this.getFeed()
       .then( (data) => {
 
-        // console.log('FEED',data);
+        console.log('FEED',data);
 
         var feed = [];
         data.response.forEach((val, i) => {
