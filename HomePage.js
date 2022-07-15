@@ -208,7 +208,7 @@ export default function HomePage ({navigation, route}) {
                 </Text>
                 <Text style = {{fontSize: subTextSize, color: 'white', paddingTop: 20}}>
                     
-                    {dailyChallenge.title}
+                    {dailyChallenge?.title}
                 </Text>
                 <View style = {{width: 50, height: 50, backgroundColor: 'rgba(52, 52, 52, 0.5)', borderRadius: 30, position: 'absolute', bottom: 10, left: 10, flexDirection: 'column', justifyContent: 'center'}}>
                     <TouchableOpacity onPress = {toggleModal}>
@@ -270,7 +270,7 @@ export default function HomePage ({navigation, route}) {
                 </Text>
                 <Text style = {{fontSize: subTextSize, color: 'white', paddingTop: 20}}>
                     {/* Drink a bucket of water */}
-                    {monthlyChallenge.title}
+                    {monthlyChallenge?.title}
                 </Text>
                 <View style = {{width: 50, height: 50, backgroundColor: 'rgba(52, 52, 52, 0.5)', borderRadius: 30, position: 'absolute', bottom: 10, left: 10, flexDirection: 'column', justifyContent: 'center'}}>
                     <TouchableOpacity onPress = {toggleModal2}>
@@ -296,7 +296,7 @@ export default function HomePage ({navigation, route}) {
                     Weekly Challenge
                 </Text>
                 <Text style = {{fontSize: subTextSize, color: 'white', paddingTop: 20}}>
-                    {weeklyChallenge.title}
+                    {weeklyChallenge?.title}
                 </Text>
                 <View style = {{width: 50, height: 50, backgroundColor: 'rgba(52, 52, 52, 0.5)', borderRadius: 30, position: 'absolute', bottom: 10, left: 10, flexDirection: 'column', justifyContent: 'center'}}>
                     <TouchableOpacity onPress = {toggleModal3}>
