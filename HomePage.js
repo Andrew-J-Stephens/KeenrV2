@@ -215,7 +215,7 @@ export default function HomePage ({navigation, route}) {
                     <Ionicons name="arrow-back-outline" size={32} color= 'white' style = {{alignSelf: 'center'}}/>
                     </TouchableOpacity>
                 </View>
-                <View style = {{width: 50, height: 50, backgroundColor: 'rgba(52, 52, 52, 0.5)', borderRadius: 30, position: 'absolute', bottom: 10, left: 100, flexDirection: 'column', justifyContent: 'center'}}>
+                <View style = {{width: 50, height: 50, backgroundColor: 'rgba(52, 52, 52, 0.5)', borderRadius: 30, position: 'absolute', bottom: 10, flexDirection: 'column', justifyContent: 'center'}}>
                     
                     {/* <Ionicons name="alert-outline" size={32} color= 'white' style = {{alignSelf: 'center'}}/> */}
                     {/* </TouchableOpacity> */}
@@ -236,7 +236,11 @@ export default function HomePage ({navigation, route}) {
         <TouchableOpacity onPress={() => navigation.navigate('Account')} style = {{alignSelf: 'center'}}>
           <Ionicons name="person-circle-outline" size={48} color="black" style = {{alignSelf: 'center'}}/>
         </TouchableOpacity>
-          <Text style = {{width: 70, height: 70, alignSelf: 'center'}}>Hello, {user?.username}</Text>
+          <View style = {{position: 'absolute', width: '100%', flexDirection: 'row', justifyContent: 'center', top: 60, left: 10}}>
+            <Text style = {{fontSize: 20, color: 'black', fontWeight: 'bold'}}>
+              {user?.username}
+            </Text>
+          </View>
           <View style = {styles.box}>
           <Ionicons name="flame" size={24} color="black" style = {{paddingHorizontal: 5}}/>
           <Text style = {{fontSize: 24, fontWeight: 'bold'}}>{streak}</Text>

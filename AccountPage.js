@@ -89,7 +89,7 @@ function HomeNav() {
       <View style = {{top: 60, alignSelf: 'center'}}>
           <UserIcon />
       </View>
-      <Pressable
+      <Pressable style = {{position: 'absolute', top: 60, right: 30}}
         onPress={() => {
           
           Auth.signOut().then(() => {
@@ -97,7 +97,7 @@ function HomeNav() {
           });
         }}
         >
-            <Text>SIgn Out</Text> 
+            <Ionicons name="log-in-outline" size={48} color="black" style = {{alignSelf: 'center'}}/> 
       </Pressable>
     </View>
   );
