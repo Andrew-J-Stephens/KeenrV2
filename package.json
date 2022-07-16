@@ -52,7 +52,6 @@
     "react-native-webview": "11.18.1",
     "react-navigation": "^4.4.4",
     "react-navigation-stack": "^2.10.4",
-    "react-tinder-card": "^1.4.5",
     "use-force-update": "^1.0.8"
   },
   "devDependencies": {

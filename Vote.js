@@ -150,6 +150,7 @@ export default class Vote extends Component {
   }
   
   render () {
+
     
     return (
       <View style={styles.container}>
@@ -172,7 +173,7 @@ export default class Vote extends Component {
               if (card != undefined) 
                 return (
                   
-                    <View style = {{top: '30%', flexDirection: 'row', justifyContent: 'center'}}>
+                    <View style = {{top: 0, flexDirection: 'row', justifyContent: 'center'}}>
                         <Card post={card} />
                     </View>
                 );
@@ -200,12 +201,12 @@ export default class Vote extends Component {
         
         
         </Swiper>
-        <TouchableOpacity onPress={() => this.swiper.swipeRight()} title='Swipe Back' style = {{position: 'absolute', right: 50, bottom: 150}}>
+        <TouchableOpacity onPress={() => this.swiper.swipeRight()} title='Swipe Back' style = {{position: 'absolute', right: 50, bottom: 50}}>
             <View style = {{backgroundColor: "#9fd62f", padding: 10, borderRadius: 50, height: 60, width: 60}}>
             <Ionicons name="checkmark-outline" size={36} color='white' style = {{alignSelf: 'center'}}/>
             </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => this.swiper.swipeLeft()} title='Swipe Back' style = {{position: 'absolute', left: 50, bottom: 150}}>
+        <TouchableOpacity onPress={() => this.swiper.swipeLeft()} title='Swipe Back' style = {{position: 'absolute', left: 50, bottom: 50}}>
             <View style = {{backgroundColor: '#ff5340', padding: 10, borderRadius: 50, height: 60, width: 60}}>
                 <Ionicons name="close-outline" size={36} color='white' style = {{alignSelf: 'center'}}/>
             </View>
@@ -220,7 +221,7 @@ const styles = StyleSheet.create({
     width: windowWidth,
     height: windowHeight,
     backgroundColor: 'white',
-    paddingTop: 20
+    paddingTop: 10
   },
   text: {
     textAlign: 'center',
