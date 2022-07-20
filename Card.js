@@ -55,7 +55,7 @@ export default function Card({post}) {
   return (
     <View style = {styles.container}>
         <Image
-        style = {{width: windowWidth*0.95, height: windowHeight*0.5, borderRadius: 10}}
+        style = {{width: windowWidth*0.95, height: windowHeight*0.75, borderRadius: 10}}
         source={image}
         />
         <View style = {styles.likeButton}>
@@ -84,7 +84,7 @@ export default function Card({post}) {
 const styles = StyleSheet.create({
     container: {
         width: windowWidth*0.95,
-        height: windowHeight*0.5,
+        height: windowHeight*0.75,
         backgroundColor: accentColor,
         borderRadius: 10,
     },
