@@ -14,7 +14,6 @@
     "categories": {
       "auth": {
         "keenrv2c25570d7c25570d7": {},
-<<<<<<< HEAD
         "keenrtodo": {
           "userPoolId": "us-east-2_Cp7f3rXcJ",
           "userPoolName": "keenr_users",
@@ -28,9 +27,6 @@
           "unauthRoleArn": "arn:aws:iam::708565822424:role/Cognito_keenr_identitiesUnauth_Role",
           "unauthRoleName": "Cognito_keenr_identitiesUnauth_Role"
         }
-=======
-        "keenrtodod18b4b94d18b4b94": {}
->>>>>>> c5c44667dbd93b17c3587ead4c54aa9d40c54692
       }
     }
   },

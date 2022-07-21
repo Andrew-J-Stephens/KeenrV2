@@ -1,5 +1,4 @@
 {
-<<<<<<< HEAD
   "auth": {
     "keenrtodo": {
       "service": "Cognito",
@@ -9,9 +8,6 @@
       "customAuth": false
     }
   },
-=======
-  "auth": {},
->>>>>>> c5c44667dbd93b17c3587ead4c54aa9d40c54692
   "api": {
     "keenrv2": {
       "service": "AppSync",
