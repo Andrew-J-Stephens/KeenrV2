@@ -5,6 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { Dimensions } from 'react-native';
 import React, { useState } from 'react';
 import PhoneNum from './PhoneNum';
+import { Auth } from 'aws-amplify';
 
 const primaryColor = '#ffffff';
 const secondaryColor = '#0000000';
@@ -15,8 +16,9 @@ const parTextSize = "15%";
 const streak = 23;
 
 
-export default function Username({navigation}) {
-
+export default function Username({navigation, route}) {
+    
+    const [userName, setUserName] = useState('');
     return(
 
         <View style = {{flex: 1, backgroundColor: 'white', flexDirection: 'column', justifyContent: 'start', paddingTop: 100}}>
@@ -25,12 +27,28 @@ export default function Username({navigation}) {
             style = {{borderRadius: 10, width: 200, height: 200, alignSelf: 'center'}}
             source={require('../assets/icon.png')}
         />
-        <TextInput autoFocus={true} placeholder = "Username" style = {{backgroundColor: '#f6f6f6', width: '80%', height: 50, alignSelf: 'center', borderRadius: 10, paddingHorizontal: 20, fontSize: '15%'}}>
+        <TextInput autoFocus={false} onChangeText={(username) => setUserName(username) } value={userName}  placeholder = "Username" style = {{backgroundColor: '#f6f6f6', width: '80%', height: 50, alignSelf: 'center', borderRadius: 10, paddingHorizontal: 20, fontSize: '15%'}}>
 
         </TextInput>
-        <TouchableOpacity style = {{alignSelf: 'center', backgroundColor: '#ff5857', paddingHorizontal: 20, margin: 20, height: 50, borderRadius: 10, flexDirection: 'row', justifyContent: 'center'}}
-        onPress={() => navigation.navigate('PhoneNum')}>
-            <Text style = {{alignSelf: 'center', color: primaryColor, fontWeight: 'bold', fontSize: '20%'}}>Next</Text>
+        <TouchableOpacity style = {{alignSelf: 'center', backgroundColor: '#ff5857', paddingHorizontal: 20, margin: 20, marginBottom: 200, height: 50, borderRadius: 10, flexDirection: 'row', justifyContent: 'center'}}
+            onPress={ function() { 
+                navigation.navigate('Password', {userName: userName});
+            }
+        }
+        >
+            <Text style = {{alignSelf: 'center', color: primaryColor, fontWeight: 'bold', fontSize: '20%'}}>Register My Account</Text>
+            <Ionicons name="arrow-forward-outline" size={'20%'} color="white" style = {{alignSelf: 'center', paddingLeft: 10}}/>
+        </TouchableOpacity>
+        <View style = {{alignSelf: 'center', paddingHorizontal: 20, flexDirection: 'row', justifyContent: 'center'}}>
+            <Text style = {{fontWeight: 'bold', color: 'lightgrey'}}>Already have an account?</Text>
+        </View>
+        <TouchableOpacity style = {{alignSelf: 'center', backgroundColor: '#53a3db', paddingHorizontal: 20, margin: 10, height: 40, borderRadius: 10, flexDirection: 'row', justifyContent: 'center'}}
+            onPress={ function() { 
+                navigation.navigate('PhoneNum', {userName: userName});
+            }
+        }
+        >
+            <Text style = {{alignSelf: 'center', color: primaryColor, fontWeight: 'bold', fontSize: '15%'}}>Login</Text>
             <Ionicons name="arrow-forward-outline" size={'20%'} color="white" style = {{alignSelf: 'center', paddingLeft: 10}}/>
         </TouchableOpacity>
 

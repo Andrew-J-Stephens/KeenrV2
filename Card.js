@@ -3,27 +3,33 @@ import { SafeAreaView, StyleSheet, Text, View, TouchableOpacity, Image } from 'r
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { NavigationContainer } from '@react-navigation/native';
 import { Dimensions } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+
+import { Amplify, Auth, DataStore, Storage } from 'aws-amplify';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 const username = "AndrewS";
-const thisPrompt = "Drink a bottle of water";
+const thisPrompt = "Drink  two bottle of water";
 
 
 const primaryColor = '#ffffff';
 const secondaryColor = '#0000000';
 const accentColor = '#e0e0e0';
-const headerTextSize = "30%";
-const subTextSize = "18%";
-const parTextSize = "15%";
+const headerTextSize = "30";
+const subTextSize = 18;
+const parTextSize = 15;
 const streak = 23;
 
 
 
-export default function Card() {
+export default function Card({post}) {
+    console.log('in card, post:', post);
+    
 
     const [heartColor, setHeartColor] = useState('white');
+    const [image, setImage] = useState({uri: post?.image});
+    
     function like() {
         if (heartColor == 'white'){
             setHeartColor("#ff5340")
@@ -32,11 +38,25 @@ export default function Card() {
         }
     }
 
+    async function getImage() {
+        // console.log('get IMAGE');
+        
+        // const image = post.image;
+        // const image = await Storage.get(post?.post.filename);
+        // setImage({uri: image});
+        
+        setImage({uri: post?.image});
+    }
+
+    useEffect( () => {
+        getImage();
+    }, []);
+
   return (
     <View style = {styles.container}>
         <Image
-        style = {{width: windowWidth*0.95, height: windowHeight*0.5, borderRadius: 10}}
-        source={require('./assets/water.jpg')}
+        style = {{width: windowWidth*0.95, height: windowHeight*0.75, borderRadius: 10}}
+        source={image}
         />
         <View style = {styles.likeButton}>
             <TouchableOpacity style = {{alignSelf: 'center'}} onPress = {()=> like()}>
@@ -49,8 +69,12 @@ export default function Card() {
         <View style = {styles.info}>
             <Ionicons name="person-circle-outline" size={48} color="white" style = {{alignSelf: 'center'}}/>
             <View style = {{flexDirection: 'column', alignSelf: 'center', paddingLeft: 10}}>
-                <Text style = {{fontWeight: 'bold', fontSize: subTextSize, color: 'white'}}>{username}</Text>
-                <Text style = {{fontSize: parTextSize, color: 'white'}}>{thisPrompt}</Text>
+                <Text style = {{fontWeight: 'bold', 
+                    fontSize: subTextSize, 
+                    color: 'white'}}>{<Text >{post?.post.username}</Text>}</Text>
+                <Text style = {{ 
+                    fontSize: parTextSize,
+                    color: 'white'}}>{<Text >{post?.post.challenge.title}</Text>}</Text>
             </View>
         </View>
     </View>
@@ -60,7 +84,7 @@ export default function Card() {
 const styles = StyleSheet.create({
     container: {
         width: windowWidth*0.95,
-        height: windowHeight*0.5,
+        height: windowHeight*0.75,
         backgroundColor: accentColor,
         borderRadius: 10,
     },

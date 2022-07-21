@@ -3,7 +3,9 @@ import { SafeAreaView, StyleSheet, Text, View, TouchableOpacity, Image } from 'r
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { NavigationContainer } from '@react-navigation/native';
 import { Dimensions } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+
+import { Amplify, Auth, DataStore, Storage } from 'aws-amplify';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -21,9 +23,11 @@ const streak = 23;
 
 
 
-export default function MiniCard() {
+export default function MiniCard({post}) {
 
     const [heartColor, setHeartColor] = useState('white');
+    const [image, setImage] = useState(null);
+
     function like() {
         if (heartColor == 'white'){
             setHeartColor("#ff5340")
@@ -32,11 +36,21 @@ export default function MiniCard() {
         }
     }
 
+    async function getImage() {
+
+        const img = await Storage.get(post.filename);
+        setImage({uri: img});
+    }
+
+    useEffect( () => {
+        getImage();
+    }, []);
+    
   return (
     <View style = {styles.container}>
         <Image
         style = {{width: windowWidth*0.45, height: windowHeight*0.25, borderRadius: 10}}
-        source={require('./assets/water.jpg')}
+        source={image}
         />
         <View style = {styles.likeButton}>
             <TouchableOpacity style = {{alignSelf: 'center'}} onPress = {()=> like()}>
@@ -44,7 +58,8 @@ export default function MiniCard() {
             </TouchableOpacity>
        </View>
         <View style = {styles.info}>
-            <Ionicons name="person-circle-outline" size={48} color="white" style = {{alignSelf: 'center'}}/>
+            <Text >{post?.challenge.title}</Text>
+            {/* <Ionicons name="person-circle-outline" size={48} color="white" style = {{alignSelf: 'center'}}/> */}
         </View>
     </View>
   );

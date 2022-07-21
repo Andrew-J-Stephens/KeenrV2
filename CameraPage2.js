@@ -10,6 +10,7 @@ import UserIcon from './UserIcon';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 const weeklyColor = '#ffbc59';
+const ChallengeType = 2;
 
 function HomeNav() {
     const navigation = useNavigation(); 
@@ -27,7 +28,8 @@ function HomeNav() {
     );
     }
 
-export default function CameraPage2() {
+export default function CameraPage2({navigation, route}) {
+  
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
   const [camera, setCamera] = useState(null);
   const [image, setImage] = useState(null);
@@ -39,9 +41,16 @@ useEffect(() => {
 })();
   }, []);
 const takePicture = async () => {
-    if(camera){
-        const data = await camera.takePictureAsync(null)
-        setImage(data.uri);
+
+    if (camera) {
+
+      const data = await camera.takePictureAsync(null)
+      
+      const filename = await route.params.uploadPhotoHandler( JSON.stringify(data.uri) );
+      
+      if (filename) {
+        navigation.navigate('Home', {filename, ChallengeType});
+      }
     }
   }
 

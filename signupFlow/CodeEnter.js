@@ -5,12 +5,18 @@ import { NavigationContainer } from '@react-navigation/native';
 import { Dimensions } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import PhoneNum from './PhoneNum';
+
+import { Auth } from 'aws-amplify';
+
+
+
 import {
     CodeField,
     Cursor,
     useBlurOnFulfill,
     useClearByFocusCell,
   } from 'react-native-confirmation-code-field';
+import { ConsoleLogger } from '@aws-amplify/core';
 
 const primaryColor = '#ffffff';
 const secondaryColor = '#0000000';
@@ -26,8 +32,12 @@ export const DEFAULT_CELL_BG_COLOR = '#fff';
 export const NOT_EMPTY_CELL_BG_COLOR = '#3557b7';
 export const ACTIVE_CELL_BG_COLOR = '#f7fafe';
 
+function useForceUpdate() {
+    const [update, setUpdate] = useState(0);
+    return () => setUpdate(value => value+1);
+}
 
-export default function CodeEnter({navigation}) {
+export default function CodeEnter({navigation, route}) {
 
     const [value, setValue] = useState('');
     const ref = useBlurOnFulfill({value, cellCount: CELL_COUNT});
@@ -36,6 +46,31 @@ export default function CodeEnter({navigation}) {
         setValue,
     });
     const CELL_COUNT = 6;
+
+    const forceUpdate = useForceUpdate();
+   
+      
+
+    async function confirmSignUp ()  {
+    
+        try {
+
+            const username = route.params.userName;
+            const code = value;
+            const res = await Auth.confirmSignUp(username, code);
+            
+            if (res) {
+                await Auth.signIn(username, route.params.password);
+            }
+            forceUpdate();
+            navigation.navigate('Landing');
+
+
+    
+        } catch (err) {
+            console.warn('error confirmation, ', err);
+        }
+      }
 
 
     return(
@@ -67,10 +102,22 @@ export default function CodeEnter({navigation}) {
             </Text>
             )}
         /></View>
-        <TouchableOpacity style = {{alignSelf: 'center', backgroundColor: '#ffbc59', paddingHorizontal: 20, margin: 20, height: 50, borderRadius: 10, flexDirection: 'row', justifyContent: 'center'}}
-        onPress={() => navigation.navigate('Main')}>
-            <Text style = {{alignSelf: 'center', color: primaryColor, fontWeight: 'bold', fontSize: '20%'}}>Confirm</Text>
-        </TouchableOpacity>
+
+
+        <View style = {{flexDirection: 'row', justifyContent: 'center'}}>
+            <TouchableOpacity style = {{alignSelf: 'center', backgroundColor: '#38b6ff', paddingHorizontal: 20, margin: 20, height: 50, borderRadius: 10, flexDirection: 'row', justifyContent: 'center'}}
+            onPress={() => navigation.navigate('Username')}>
+                <Ionicons name="arrow-back-outline" size={'20%'} color="white" style = {{alignSelf: 'center', paddingRight: 10}}/>
+                <Text style = {{alignSelf: 'center', color: primaryColor, fontWeight: 'bold', fontSize: '20%'}}>Back</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style = {{alignSelf: 'center', backgroundColor: '#ffbc59', paddingHorizontal: 20, margin: 20, height: 50, borderRadius: 10, flexDirection: 'row', justifyContent: 'center'}}
+                onPress={() => 
+                    confirmSignUp()
+                }>
+                <Text style = {{alignSelf: 'center', color: primaryColor, fontWeight: 'bold', fontSize: '20%'}}>Confirm</Text>
+            </TouchableOpacity>
+        </View>
+        
 
         </View>
 

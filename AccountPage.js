@@ -1,34 +1,53 @@
-import React, {Component} from 'react';
+import React, {Component, useState} from 'react';
 import {View, StyleSheet, Text, Button, TouchableOpacity, FlatList, RefreshControl} from 'react-native';
 import GridImageView from 'react-native-grid-image-viewer';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import UserIcon from './UserIcon';
 import MiniCard from './MiniCard';
+import useForceUpdate from 'use-force-update';
 
-import { Dimensions } from 'react-native';
+import  { Dimensions, Pressable } from 'react-native';
+import { Amplify, Auth, DataStore } from 'aws-amplify';
+import { Challenge, Post, Comment } from './src/models';
+import { getPixelSizeForLayoutSize } from 'react-native/Libraries/Utilities/PixelRatio';
+
 
 const wait = (timeout) => {
   return new Promise(resolve => setTimeout(resolve, timeout));
 }
 
-
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-function AccountList() {
+
+function AccountList({posts}) {
+  // console.log('account list posts', posts);
 
   const [refreshing, setRefreshing] = React.useState(false);
+  const [userPosts, setUserPosts] = React.useState();
 
   const onRefresh = React.useCallback(() => {
+    
     setRefreshing(true);
-    wait(1000).then(() => setRefreshing(false));
+
+    posts.getPost()
+      .then( (data) => {
+        setUserPosts(data);
+        setRefreshing(false)
+      })
+      .catch( () => {
+        setRefreshing(false);
+      });
+    
+
+    
   }, []);
 
   return(
 
     <FlatList
-        data={[1,2,3,4,5,6,7,8,9]}
+        data={userPosts}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
@@ -37,14 +56,13 @@ function AccountList() {
         }
         renderItem={({ item }) => (
             <View style = {{paddingLeft: windowWidth*0.0325, paddingTop: windowWidth*0.0325}}>
-            <MiniCard />
+            <MiniCard post={item}/>
             </View>
         )}
         //Setting the number of column
         numColumns={2}
         keyExtractor={(item, index) => index.toString()}
         />
-
   );
 }
 
@@ -52,46 +70,81 @@ function HomeNav() {
 
   const [refreshing, setRefreshing] = React.useState(false);
 
-    const onRefresh = React.useCallback(() => {
-      setRefreshing(true);
-      wait(1000).then(() => setRefreshing(false));
-    }, []);
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    wait(1000).then(() => setRefreshing(false));
+  }, []);
 
-    const navigation = useNavigation(); 
-    return(
+  const navigation = useNavigation(); 
+  
+  const forceUpdate = useForceUpdate();
+
+  return(
     <View>
-    <TouchableOpacity onPress={() => navigation.goBack()} style = {{position: 'absolute', top: 60, left: 30}}>
-        <View>
-            <Ionicons name="chevron-back-circle-outline" size={48} color="black" style = {{alignSelf: 'center'}}/>
-        </View>
-    </TouchableOpacity>
-    <View style = {{top: 60, alignSelf: 'center'}}>
-        <UserIcon />
+      <TouchableOpacity onPress={() => navigation.goBack()} style = {{position: 'absolute', top: 60, left: 30}}>
+          <View>
+              <Ionicons name="chevron-back-circle-outline" size={48} color="black" style = {{alignSelf: 'center'}}/>
+          </View>
+      </TouchableOpacity>
+      <View style = {{top: 60, alignSelf: 'center'}}>
+          <UserIcon />
+      </View>
+      <Pressable style = {{position: 'absolute', top: 60, right: 30}}
+        onPress={() => {
+          
+          Auth.signOut().then(() => {
+            navigation.navigate('Login');  
+          });
+        }}
+        >
+            <Ionicons name="log-in-outline" size={48} color="black" style = {{alignSelf: 'center'}}/> 
+      </Pressable>
     </View>
-    </View>
-    );
-    }
+  );
+}
 
 export default class AccountPage extends Component {
-
-
+  
   constructor(props) {
     super(props);
+
+    this.state = {
+      posts: [],
+    }
   }
 
   
+  getPost = async (params) =>  {
+    console.log('get posts');
+    try {
+
+      const user = await Auth.currentAuthenticatedUser();
+
+      const response = await DataStore.query(Post, p => p.username('eq', user.username).challenge('ne', null));
+      // console.log('data store response', response);
+
+      if (response) {
+        
+        return Promise.resolve(response);
+      }
+      
+    } catch (e) {
+      console.log(' get post error:', e.message);
+    }
+  }
+
   render() {
 
     return (
-    <View style = {{flex: 3}}>
-    <View style = {{flex: 1}}>
-        <HomeNav />
-    </View>
-    <View style = {styles.background}>
-                {/* Basic Usage */}
-                <AccountList />
-            </View>
-    </View>
+      <View style = {{flex: 3}}>
+      <View style = {{flex: 1}}>
+          <HomeNav />
+      </View>
+      <View style = {styles.background}>
+                  {/* Basic Usage */}
+                  <AccountList posts={{getPost: this.getPost}}/>
+              </View>
+      </View>
     );
   }
 }

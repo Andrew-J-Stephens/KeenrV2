@@ -7,8 +7,12 @@ import Vote from './Vote';
 import { useNavigation } from '@react-navigation/native';
 import UserIcon from './UserIcon';
 
+import { Storage } from 'aws-amplify';
+
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
+
+const ChallengeType = 1;
 
 function HomeNav() {
     const navigation = useNavigation(); 
@@ -20,33 +24,47 @@ function HomeNav() {
                 </View>
             </TouchableOpacity>
             <View style = {{backgroundColor: '#ff5340', paddingHorizontal: 30, flexDirection: 'column', justifyContent: 'center', borderRadius: 10}}>
-                <Text style = {{color: 'white', fontWeight: 'bold', fontSize: '20%'}}t>Daily Challenge</Text>
+                <Text style = {{color: 'white', fontWeight: 'bold', fontSize: 20}}t>Daily Challenge</Text>
             </View>
         </View>
     );
     }
 
-export default function CameraPage() {
+export default function CameraPage({navigation, route}) {
+
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
   const [camera, setCamera] = useState(null);
   const [image, setImage] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
-useEffect(() => {
+
+  useEffect(() => {
     (async () => {
       const cameraStatus = await Camera.requestCameraPermissionsAsync();
       setHasCameraPermission(cameraStatus.status === 'granted');
-})();
+    })();
   }, []);
-const takePicture = async () => {
-    if(camera){
-        const data = await camera.takePictureAsync(null)
-        setImage(data.uri);
+
+  
+  const takePicture = async () => {
+
+    if (camera) {
+
+      const data = await camera.takePictureAsync(null);  
+
+      const filename = await route.params.uploadPhotoHandler( JSON.stringify(data.uri) );
+      
+      if (filename) {
+        navigation.navigate('Home', {filename, ChallengeType});
+      }
+
     }
+
   }
 
   if (hasCameraPermission === false) {
     return <Text>No access to camera</Text>;
   }
+
   return (
    <View style={{ flex: 1}}>
        
@@ -63,10 +81,12 @@ const takePicture = async () => {
        </View>
 
       <View style = {{width: '100%', flexDirection: 'row', justifyContent: 'center', position: 'absolute', bottom: 0}}>
-      <TouchableOpacity onPress={() => takePicture()} style = {{backgroundColor: '#ff5340', paddingHorizontal: 5, width: 95, position: 'relative', bottom: 50, height: 95, borderRadius: 50, flexDirection: 'row', justifyContent: 'center'}}><Image
+        <TouchableOpacity onPress={() => takePicture()} style = {{backgroundColor: '#ff5340', paddingHorizontal: 5, width: 95, position: 'relative', bottom: 50, height: 95, borderRadius: 50, flexDirection: 'row', justifyContent: 'center'}}><Image
             source={require('./assets/gear.png')}
             style = {{width: 80, height: 80, alignSelf: 'center', opacity: 0.3}}
-        /></TouchableOpacity></View>
+        />
+        </TouchableOpacity>
+        </View>
 
     <View style = {{width: '100%', flexDirection: 'row', position:'absolute', justifyContent: 'center', bottom: 0, height: 95}}>
       <TouchableOpacity onPress={() => {

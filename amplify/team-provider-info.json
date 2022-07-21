@@ -1,0 +1,57 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-keenrv2-dev-195725-authRole",
+      "UnauthRoleArn": "arn:aws:iam::708565822424:role/amplify-keenrv2-dev-195725-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::708565822424:role/amplify-keenrv2-dev-195725-authRole",
+      "Region": "us-east-2",
+      "DeploymentBucketName": "amplify-keenrv2-dev-195725-deployment",
+      "UnauthRoleName": "amplify-keenrv2-dev-195725-unauthRole",
+      "StackName": "amplify-keenrv2-dev-195725",
+      "StackId": "arn:aws:cloudformation:us-east-2:708565822424:stack/amplify-keenrv2-dev-195725/65a531a0-fd87-11ec-bd31-0abbdfaae0b0",
+      "AmplifyAppId": "d8f4hkbqyhki6"
+    },
+    "categories": {
+      "auth": {
+        "keenrv2c25570d7c25570d7": {},
+        "keenrtodo": {
+          "userPoolId": "us-east-2_Cp7f3rXcJ",
+          "userPoolName": "keenr_users",
+          "webClientId": "5mkoeh901614cc73tgc9qe3dlu",
+          "nativeClientId": "5mkoeh901614cc73tgc9qe3dlu",
+          "identityPoolId": "us-east-2:fbcde438-a511-4f94-98a6-c258682c2b21",
+          "identityPoolName": "keenr_identities",
+          "allowUnauthenticatedIdentities": false,
+          "authRoleArn": "arn:aws:iam::708565822424:role/Cognito_keenr_identitiesAuth_Role",
+          "authRoleName": "Cognito_keenr_identitiesAuth_Role",
+          "unauthRoleArn": "arn:aws:iam::708565822424:role/Cognito_keenr_identitiesUnauth_Role",
+          "unauthRoleName": "Cognito_keenr_identitiesUnauth_Role"
+        }
+      }
+    }
+  },
+  "staging": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-keenrtodo-staging-01957-authRole",
+      "UnauthRoleArn": "arn:aws:iam::708565822424:role/amplify-keenrtodo-staging-01957-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::708565822424:role/amplify-keenrtodo-staging-01957-authRole",
+      "Region": "us-east-2",
+      "DeploymentBucketName": "amplify-keenrtodo-staging-01957-deployment",
+      "UnauthRoleName": "amplify-keenrtodo-staging-01957-unauthRole",
+      "StackName": "amplify-keenrtodo-staging-01957",
+      "StackId": "arn:aws:cloudformation:us-east-2:708565822424:stack/amplify-keenrtodo-staging-01957/5fc7e520-f80a-11ec-b0f5-063daa64af2c",
+      "AmplifyAppId": "d8f4hkbqyhki6"
+    },
+    "categories": {
+      "auth": {
+        "keenrv28451f44f": {
+          "userPoolId": "us-east-2_Cp7f3rXcJ",
+          "userPoolName": "keenr_users",
+          "webClientId": "5mkoeh901614cc73tgc9qe3dlu",
+          "nativeClientId": "5mkoeh901614cc73tgc9qe3dlu"
+        },
+        "keenrv2c25570d7c25570d7": {}
+      }
+    }
+  }
+}
