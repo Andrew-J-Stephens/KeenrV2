@@ -48,6 +48,8 @@ import Swiper from 'react-native-deck-swiper';
 import Card from './Card';
 import React, {Component, useState} from 'react';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import { Amplify, Auth, DataStore, Storage } from 'aws-amplify';
 import { Challenge, Post, Comment } from './src/models';
 
@@ -95,7 +97,38 @@ export default class Vote extends Component {
     this.swiper.swipeLeft()
   };
 
+  // swipePost = async (post) => {
+
+  //   const user = await Auth.currentAuthenticatedUser();
+
+  //   const seen = new SeenPosts(
+  //     {
+  //       post,
+  //       usernmae: user.username,
+  //     }
+  //   );
+  // };
+
+  getLastSyncDate = async (user) => {
+    try {
+      const date = await AsyncStorage.getItem(user.username+'_time');
+      
+      return date;
+    } catch (e) {
+      console.log('get last login error', e);
+      return 0;
+    }
+    return date;
+  } 
   
+  setLastSyncDate = async (user) => {
+    try {
+      const time = new Date();
+      await AsyncStorage.setItem(user.username+'_time', time.getTime().toString());
+    } catch (e) {
+      console.log('could not set', e);
+    }
+  }
 
   getFeed = async (params) =>  {
     
@@ -103,22 +136,28 @@ export default class Vote extends Component {
 
       const user = await Auth.currentAuthenticatedUser();
 
-      const response = await DataStore.query(Post, p => p.username('ne', user.username).challenge('ne', null));
-      // console.log('ds ', response);
-
-      var images = [];
-      for (var i in response) {
-
-        var post = response[i];
-
-        var image = await Storage.get(post?.filename);
-        
-        images.push(image);
-      }
+      const ts = await this.getLastSyncDate(user);
       
-      if (response) {
+      //AWS does not support querying createdAt field. Filter out results. Need to manually add time field to support querying.
+      var response = await DataStore.query(Post, p => p.username('ne', user.username).challenge('ne', null));
+      response = response.filter( post => new Date(post.createdAt).getTime() >= ts);
+
+      this.setLastSyncDate(user);
+
+      if (response.length > 0) {
         
+        var images = [];
+        for (var i in response) {
+
+          var post = response[i];
+
+          var image = await Storage.get(post?.filename);
+          
+          images.push(image);
+        }
         return Promise.resolve({response, images});
+      } else {
+        this.onSwipedAllCards();
       }
       
     } catch (e) {
@@ -132,7 +171,7 @@ export default class Vote extends Component {
     this.getFeed()
       .then( (data) => {
 
-        console.log('FEED',data);
+        // console.log('FEED',data);
 
         var feed = [];
         data.response.forEach((val, i) => {
